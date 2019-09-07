@@ -1,0 +1,28 @@
+{
+  "name": "tlfns",
+  "version": "0.0.1",
+  "description": "frontend tool functions ",
+  "main": "src/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fntst/tlfns.git"
+  },
+  "keywords": [
+    "tools",
+    "functions",
+    "frontend",
+    "lib"
+  ],
+  "author": "fntst",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fntst/tlfns/issues"
+  },
+  "homepage": "https://github.com/fntst/tlfns#readme"
+}
