@@ -41,7 +41,7 @@ EventTarget.prototype.addListener = function(evtName,listener,immediateWay){
 */
 EventTarget.prototype.offListeners = function(evtName,listener){
   /*  
-    evtName?   str,不存在则移除所有监听  
+    evtName?   str,可选,不存在则移除所有监听  
     listener?  fn,可选,存在则只移除当前事件,否则移除所有该类事件 
   */
   

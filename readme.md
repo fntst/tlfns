@@ -28,7 +28,7 @@ EventTarget
     listener      fn,事件回调 
     immediateWay  bol,可选,立即响应的方式,默认:不立即响应,0:原生触发方式,1:仅执行回调 
   .offListeners(evtName,listener)             // 移除事件监听 
-    evtName?   str,不存在则移除所有监听  
+    evtName?   str,可选,不存在则移除所有监听  
     listener?  fn,可选,存在则只移除当前事件,否则移除所有该类事件 
   .emitListeners(evtName,data,emitWay)        // 触发事件 
     evt?      Event/str,可选,事件名称,不存在则触发所有事件的所有监听 
