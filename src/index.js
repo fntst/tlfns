@@ -20,6 +20,10 @@ import multiRowsEllipsis from "./utils/multiRowsEllipsis.js";
 import {dealQuery,formatNowTime} from "./utils/other.js";
 import {isEmail,validateNumber} from "./utils/regexpTest.js";
 
+
+import StateManager from "./design/StateManager.js";
+
+
 export default {
   getThisFnName,
   throttle,
@@ -42,6 +46,8 @@ export default {
   formatNowTime,
   isEmail,
   validateNumber,
+  
+  StateManager,
 }
 
 
