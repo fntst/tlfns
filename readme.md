@@ -2,18 +2,22 @@
 <h2>前端常用工具函数库</h2>
 
 
+安装: 
+``` 
+$ npm i -S tlfns 
+```
 
 
 使用方式: 
 ```
 // 集中引入 
-import tlfns from "../src/index.js";
+import tlfns from "tlfns";
 const {
   xxx,
 } = tlfns;
 
 // 引入指定功能 
-import xxx from "../src/utils/xxx.js";
+import xxx from "tlfns/src/utils/xxx.js";
 或 
 import 'tlfns/src/xxx.js';  // 引入无变量导出的某些功能 
 ```
@@ -54,7 +58,7 @@ Object
 ```
 LocalFiles  本地文件上传 
   let localFiles = new LocalFiles({
-    // 配置项可选 
+    // 配置项可选,默认值如下:  
     multiple=true,  // 是否多选 
     accept='*',             // 可选文件类型,可自定义,如: '.pdf,.doc' 
     limitNum=99,            // 一次最多可选数量 
@@ -135,7 +139,7 @@ LocalFiles  本地文件上传
 
 
 <h1>持续更新中....</h1>
-
+PS: 若需要的功能, 暂时没有, 也可以提 issue 
 
 
 
