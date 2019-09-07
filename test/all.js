@@ -25,7 +25,9 @@ setTimeout(function(){
 },5000)
 
 
-let localFiles = new LocalFiles();
+let localFiles = new LocalFiles({
+  base64: true, 
+});
 button1.addEventListener("click",function(evt){
   localFiles.pick()
   .then(list=>{

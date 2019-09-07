@@ -70,8 +70,9 @@ LocalFiles  本地文件上传
       console.log(list);
     });
   })
-  localFiles.onDrop(div1,function(data){
-    console.log(data);
+  // 使用拖放功能上传 
+  localFiles.onDrop(div1,function(list){
+    console.log(list);
   })
 
 ```
@@ -133,6 +134,7 @@ LocalFiles  本地文件上传
 
 
 
+<h1>持续更新中....</h1>
 
 
 
