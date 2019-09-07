@@ -1,8 +1,11 @@
 
-// 监听元素尺寸变化 
 /* 
-被监听的元素需使用 relative/absulte/fixed 定位 
-注: 依赖 Chain 
+监听元素尺寸变化 
+  默认的只有 window 存在'resize'事件,故元素无法通过'resize'事件来监听尺寸变化 
+  在需要监听的元素内放置一<object>或<iframe>元素,并占满该元素 
+  通过监听<object>或<iframe>的'window'的'resize'事件来间接对该元素进行监听 
+  
+PS: 被监听的元素需使用 relative/absulte/fixed 定位 
 */
 function listenResize(elem,callback,immediate=true){
   let injectElId = '__resize__';
