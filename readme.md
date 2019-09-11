@@ -1,4 +1,4 @@
-<h1>FrontEnd Tool Funciotns</h1>
+<h1>FrontEnd Tool Functions</h1>
 <h2>前端常用工具函数库</h2>
 
 
