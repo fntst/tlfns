@@ -6,22 +6,30 @@ import "./polyfill/call.js";
 import "./polyfill/apply.js";
 import "./polyfill/bind.js";
 
-
+// ES相关
 import {getThisFnName,throttle} from "./es/functions.js";
 import {roundFloat,preciseAdd,preciseMul} from "./es/Number.js";
-import EvtTarget from "./extend/EvtTarget.js";
-import printLog from "./extend/printLog.js";
-import adapt from "./utils/adapt.js";
-import copyText from "./utils/copyText.js";
-import {getOSName,getBrowserInfo,isIE,isLowerIE,webPAble} from "./utils/env.js";
-import listenResize from "./utils/listenResize.js";
+import {isEmail,validateNumber} from "./es/regexpTest.js";
+
+// DOM相关
+import copyText from "./dom/copyText.js";
+import multiRowsEllipsis from "./dom/multiRowsEllipsis.js";
+import onResize from "./dom/onResize.js";
+
+// BOM相关
+import {getOSName,getBrowserInfo,isIE,isLowerIE,webPAble} from "./bom/env.js";
+import onConsoleOpen from "./bom/onConsoleOpen.js";
+
+// 其他功能 
 import LocalFiles from "./utils/LocalFiles.js";
-import multiRowsEllipsis from "./utils/multiRowsEllipsis.js";
 import {dealQuery,formatNowTime} from "./utils/other.js";
-import {isEmail,validateNumber} from "./utils/regexpTest.js";
+import printLog from "./utils/printLog.js";
 
 
+// 设计方案 
+import adapt from "./design/adapt.js";
 import StateManager from "./design/StateManager.js";
+import EvtTarget from "./design/EvtTarget.js";
 
 
 export default {
@@ -30,27 +38,30 @@ export default {
   roundFloat,
   preciseAdd,
   preciseMul,
-  EvtTarget,
-  printLog,
-  adapt,
+  isEmail,
+  validateNumber,
+  
   copyText,
+  multiRowsEllipsis,
+  onResize,
+  
   getOSName,
   getBrowserInfo,
   isIE,
   isLowerIE,
   webPAble,
-  listenResize,
+  onConsoleOpen,
+  
   LocalFiles,
-  multiRowsEllipsis,
   dealQuery,
   formatNowTime,
-  isEmail,
-  validateNumber,
+  printLog,
   
+  
+  adapt,
   StateManager,
+  EvtTarget,
 }
-
-
 
 
 

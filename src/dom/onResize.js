@@ -7,7 +7,7 @@
   
 PS: 被监听的元素需使用 relative/absulte/fixed 定位 
 */
-function listenResize(elem,callback,immediate=true){
+function onResize(elem,callback,immediate=true){
   let injectElId = '__resize__';
   let injectElem = elem.querySelector('#'+injectElId);
   if (!injectElem) {
@@ -41,9 +41,9 @@ function listenResize(elem,callback,immediate=true){
   })
   immediate && resizeElem.dispatchEvent(new Event('resize'));
 }
-export default listenResize;
+export default onResize;
 /* 
-listenResize(elem)
+onResize(elem)
 .then(([evt])=>{
   console.log(evt);
 })
