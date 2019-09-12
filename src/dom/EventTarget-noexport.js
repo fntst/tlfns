@@ -82,7 +82,7 @@ EventTarget.prototype.offListeners = function(evtName,listener){
 */
 EventTarget.prototype.emitListeners = function(evtName,data,emitWay){
   /*  
-    evt?      Event/str,可选,事件名称,不存在则触发所有事件的所有监听 
+    evtName?  str,可选,事件名称,不存在则触发所有事件的所有监听 
     data?     any,可选,传递的数据 
     emitWay?  0/1,触发方式,默认:0  
   */
@@ -96,7 +96,7 @@ EventTarget.prototype.emitListeners = function(evtName,data,emitWay){
   
   let emitWayMap = {
     /* 原生触发方式,将获得原生事件效果 */
-    0: (evtName)=>{ 
+    0: ()=>{ 
       evts.forEach((itm,idx)=>{
         let evt = new Event(itm);
         // 传递自定义数据, 不使用 data 字段,避免和原生事件的data冲突  
@@ -105,7 +105,7 @@ EventTarget.prototype.emitListeners = function(evtName,data,emitWay){
       });
     },
     /* 仅执行回调 */
-    1: (evtName)=>{ 
+    1: ()=>{ 
       evts.forEach((itm,idx)=>{
         let evt = new Event(itm);
         // 传递自定义数据, 不使用 data 字段,避免和原生事件的data冲突  
@@ -115,9 +115,8 @@ EventTarget.prototype.emitListeners = function(evtName,data,emitWay){
       });
     },
   }
-  let emitWayItm = emitWayMap[emitWay];
-  emitWayItm = emitWayItm || emitWayMap[0];
-  emitWayItm(evtName);
+  let emtW = emitWay || 0;
+  emitWayMap[emitWay]();
   
 }
 
