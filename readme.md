@@ -172,7 +172,7 @@ StateManager: 状态<=>控制 条件配置化
   通过一函数传入条件来进行判断, 
 
 StateManager 使用例子:  
-  // 初始化 传入 将会用到的所有条件的list & 定义的功能的map 
+  // 初始化 传入 将会用到的所有条件的list
   let stMg = new StateManager([ 
     'aa', // 条件a
     'bb', // 条件b
