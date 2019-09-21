@@ -106,5 +106,20 @@ Object.defineProperty(Object.prototype,'every',{
   writable: true,     
   configurable: true, 
 })
+// 返回布尔值,判断对象的包含关系 
+/* obj1.includes(obj2)
+*/
+Object.defineProperty(Object.prototype,'includes',{
+  value(targetObj){
+    // 任何对象都包含空对象  
+    
+    return !targetObj.some((val,key)=>{
+      return this[key]!==val;
+    });
+  },         
+  enumerable: false,  
+  writable: true,     
+  configurable: true, 
+})
 
 
