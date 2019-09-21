@@ -173,46 +173,45 @@ StateManager: 状态<=>控制 条件配置化
 
 StateManager 使用例子:  
   // 初始化 传入 将会用到的所有条件的list & 定义的功能的map 
-  let stMg = new StateManager([ 'aa', 'bb', 'cc', 'dd', 'ee', 'ff', ],{
-    hd1: true,   // 操作1   
-    // 使用函数则可更具有扩展性,但请节制的使用,否则适得其反 
-    hd2(arg){    // 操作2 
-    },  
-    hd3: '999',  // 操作3 
-    hd4: false,  // 操作4  
-    hd5(){       // 操作5 
-      // 
-    }, 
-    hd6: true,   // 操作6 
-  });
+  let stMg = new StateManager([ 
+    'aa', // 条件a
+    'bb', // 条件b
+    'cc', // 条件c
+    'dd', // 条件d
+    'ee', // 条件e
+    'ff', // 条件f
+  ]);
   // 定义 功能 和 条件的对应关系 
-  // 如下: 表示 aa条件为'01'且bb条件为'01'时, 对应的操作为 hd1 hd2 
-  stMg.setter(['hd1','hd2'],{  
-    aa: '01', 
-    bb: '01', 
-  })
-  stMg.setter(['hd1','hd3'],{ 
-    dd: '99', 
-    bb: '10', 
-  })
-  ... // 定义若干个,根据自己业务需求而定 
+  stMg.setConfigs([
+    [
+      // 表示 aa条件为'01'且bb条件为'01'时, 对应的 hd1: true, hd2: '99' 
+      { aa: '01', bb: '01', },
+      { hd1: true, hd2: '99', },
+    ],
+    [
+      // 表示 aa条件为'02'时[而其他条件任意],对应的 hd1: false 
+      { aa: '02', },
+      { hd1: false, },
+    ],
+    // ...  定义若干个,根据自己业务需求而定 
+  ])
 
 
   // 后续在需要使用的地方进行查询
-  button1.addEventListener("click",function(evt){
-    // 可将 stMg.getter 导出, 在需要的地方引入使用 
-    let val = stMg.getter('hd1',{ aa: '01', bb: '02', }); 
-    console.log( val );
-  })
+  // 可将 stMg.getter 导出, 在需要的地方引入使用 
+  let val1 = stMg.getter('hd1',{ aa: '01', bb: '01', }); 
+  console.log( val1 ); // true 
+  let val2 = stMg.getter('hd2',{ aa: '01' }); 
+  console.log( val2 ); // '99' 
 
 针对于使用vue的项目,若使用了vuex,则可将该功能集成到 store 中 
-// 注册到store中 
-stMg.install(store,'stateManager');  
-// 后续在需要使用的地方进行查询 
-vm.$store.getters['stateManager/query']('hd2',{
-  aa: '01',
-  bb: '02',
-})('abc')
+  // 注册到store中 
+  stMg.install(store,'stateManager');  
+  // 后续在需要使用的地方进行查询 
+  vm.$store.getters['stateManager/query']('hd2',{
+    aa: '01',
+    bb: '02',
+  })
 
 ``` 
 

@@ -14,11 +14,11 @@
 
 
 class StateManager {
-  constructor(conditionList,handlesMap) {
+  constructor(conditionList) {
     
     // 配置表,用于存储条件对应的操作 
     this._conditionHandleMap = {
-      // 'aa02,bb03,cc--,dd--,ee01,': {
+      // 'aa:02,bb:03,cc:--,dd:--,ee:01': {
       //   hd1: true, 
       //   hd2(arg){}, 
       // },
@@ -26,8 +26,6 @@ class StateManager {
     
     // 所有可能的判断条件,未枚举的将被忽略  
     this._conditionList = conditionList;
-    // 所有可能的操作,未枚举的将被忽略
-    this._handlesMap = handlesMap;
     
     // 针对于使用vue的项目,若使用了vuex,则可将该功能集成到 store 中 
     let that = this;
@@ -38,15 +36,8 @@ class StateManager {
       getters: {
         // 通过可传参的getters来获取 条件对应的操作 
         query({conditionHandleMap},getters){
-          return function(handle,conditions){
-            let key = conditionList.reduce((retVal,itm,idx)=>{ 
-              let cdt = conditions[itm]?conditions[itm]:'--'; 
-              return  retVal+itm+cdt+','
-            },'') 
-            
-            if (!conditionHandleMap[key]) { return ; }
-            
-            return conditionHandleMap[key][handle];
+          return function(handle,conditionMap){
+            return that.getter(handle,conditionMap)
           }
         },
       },
@@ -54,33 +45,65 @@ class StateManager {
     }
   }
   
-  // 定义 key,使用同一的字符长度 
-  getKey(conditions){
+  // 将对象转换为字符串,定义 key,使用同一的字符长度 
+  _getKey(conditionMap){
     return this._conditionList.reduce((retVal,itm)=>{ 
-      let c = conditions[itm]?conditions[itm]:'--'; 
-      return  retVal+itm+c+','
-    },'') 
+      let val = conditionMap[itm]?conditionMap[itm]:'--'; 
+      return  retVal+itm+":"+val+','
+    },'').slice(0,-1) 
+  }
+  // 将字符串还原为对象 
+  _getObj(key){
+    let obj = {};
+    key.split(',').forEach((itm,idx )=>{
+      let arr = itm.split(':');
+      obj[arr[0]] = arr[1];
+    });
+    return obj;
+  }
+  // 对象包含关系判断 
+  _objIncludes(pObj,cObj){
+    // { key1: 1, key2: 2, } 包含 { key1:1, }, 
+    let bol = true; // 空对象{} 被任意对象包含 
+    
+    for(var key in cObj){
+      let val1 = pObj[key]
+      let val2 = cObj[key]
+      if ( val1!==val2 ) { bol = false; }
+    };
+    
+    return bol;
   }
   
   
   /* 初始化操作条件配置: 
   当情况过于复杂,如判断的条件可能个数不同,导致手动定义不便,而采用函数来简化 
   */
-  setter(handleList,conditions){
-    let key = this.getKey(conditions);
-    let val = {}
-    handleList.forEach(handle=>{ val[handle] = this._handlesMap[handle]; })
-    this._conditionHandleMap[key] = val;
+  // 设置单条 
+  setter(conditionMap,handleMap){
+    let key = this._getKey(conditionMap);
+    this._conditionHandleMap[key] = { ...handleMap, };
   }
-  // 用于写入条件对应的操作 
-  getter(handle,conditions){
-    let key = this.getKey(conditions);
-    
-    if (!this._conditionHandleMap[key]) { return ; }
-    
-    return this._conditionHandleMap[key][handle];
+  // 集中设置 
+  setConfigs(configList){
+    configList.forEach((itm,idx)=>{
+      this.setter(itm[0],itm[1]);
+    });
   }
   
+  // 查询 条件对应的操作的值  
+  getter(handle,conditionMap){
+    let result = null;
+    for(var key in this._conditionHandleMap){
+      let val = this._conditionHandleMap[key];
+      let obj = this._getObj(key)
+      if ( this._objIncludes(obj,conditionMap) ) {
+        result = val[handle];
+        break;
+      }
+    };
+    return result;
+  }
   
   install(store,mdName='stateManager'){
     store.registerModule(mdName,this._store)
