@@ -7,12 +7,12 @@ import './onConsoleOpen.js';
 */
 
 /* 测试 StateManager 
-import './StateManager.js';
 */
+import './StateManager.js';
 
 /* 测试 Object 
-*/
 import './Object.js';
+*/
 
 
 

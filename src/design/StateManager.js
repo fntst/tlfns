@@ -18,7 +18,7 @@ class StateManager {
     
     // 配置表,用于存储条件对应的操作 
     this._conditionHandleMap = {
-      // 'aa:02,bb:03,cc:--,dd:--,ee:01': {
+      // 'aa:02,bb:03,cc:*,dd:*,ee:!01': {
       //   hd1: true, 
       //   hd2(arg){}, 
       // },
@@ -48,7 +48,7 @@ class StateManager {
   // 将对象转换为字符串,定义 key,使用同一的字符长度 
   _getKey(conditionMap){
     return this._conditionList.reduce((retVal,itm)=>{ 
-      let val = conditionMap[itm]?conditionMap[itm]:'--'; 
+      let val = conditionMap[itm]?conditionMap[itm]:'*'; 
       return  retVal+itm+":"+val+','
     },'').slice(0,-1) 
   }
@@ -61,25 +61,46 @@ class StateManager {
     });
     return obj;
   }
-  // 对象包含关系判断 
+  // 条件集合包含关系判断: 条件少包含条件多 
   _objIncludes(pObj,cObj){
-    // { key1: 1, key2: 2, } 包含 { key1:1, }, 
-    let bol = true; // 空对象{} 被任意对象包含 
+    // { key1:1, } 相当于 { key1:1, key2: <*>, } 包含 { key1: 1, key2: 2, } 
+    let bol = true; // 空对象{} 包含任意对象  
     
-    for(var key in cObj){
-      let val1 = pObj[key]
-      let val2 = cObj[key]
-      if ( val1!==val2 ) { bol = false; }
+    for(var key in pObj){
+      let val1 = pObj[key];
+      // 查询的条件 未定义则表示为任意值 
+      let val2 = cObj[key] || '*'; 
+      
+      // 配置的条件: * 
+      if (val1==='*') { continue; }  
+      // 配置的条件: ! 
+      if (val1[0]==='!') {
+        val1 = val1.slice(1);
+        // 无法确定包含关系,即不包含,直接跳出 
+        if (val2==='*') {
+          bol = false; 
+          break;
+        }
+        if (val1===val2) { 
+          bol = false; 
+          break;
+        }
+        continue;
+      }
+      // 配置的条件: 其他 
+      if ( val2==="*" || val1!==val2 ) { 
+        bol = false; 
+        break;
+      }
     };
     
     return bol;
   }
   
-  
   /* 初始化操作条件配置: 
   当情况过于复杂,如判断的条件可能个数不同,导致手动定义不便,而采用函数来简化 
   */
-  // 设置单条 
+  // 单条设置 
   setter(conditionMap,handleMap){
     let key = this._getKey(conditionMap);
     this._conditionHandleMap[key] = { ...handleMap, };
@@ -93,7 +114,7 @@ class StateManager {
   
   // 查询 条件对应的操作的值  
   getter(handle,conditionMap){
-    let result = null;
+    let result = undefined;
     for(var key in this._conditionHandleMap){
       let val = this._conditionHandleMap[key];
       let obj = this._getObj(key)
