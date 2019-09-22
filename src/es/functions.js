@@ -29,21 +29,29 @@ export function getThisFnName(){
 })();
 */
 
-// 函数节流:限制函数执行频率 
-export function throttle(fn,context,time=600){  
-  /*Input:
-  -  fn       // [高频]执行的函数 
-  -  context  // 函数执行的上下文 
-  -  time=600 // num,限制的频率,单位:ms  
-  * Output: undefined
-  */
+// 防抖: 操作后的一段时间内只执行一次,触发操作将重新计算时间 
+function debounce(fn,time=500){
+  let timeoutId = null; 
+  return function(){
+    clearTimeout(timeoutId); 
+    timeoutId = setTimeout(()=>{
+      fn.apply(this, arguments);
+    },time);
+  };
+}
 
-  if(!fn._1_){
-    fn._1_ = setTimeout(function(){
-      fn.call(context);
-      fn._1_ = false;
-    },time)
-  }
+// 节流: 限制函数执行频率 
+export function throttle(fn,time=500){  
+  let isRun = true; // 控制执行 
+  return function(){
+    if (!isRun){return;}  
+    isRun = false; 
+    
+    setTimeout(()=>{ 
+      fn.apply(this,arguments);
+      isRun = true;
+    },time);
+  };
 }
 
 
