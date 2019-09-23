@@ -49,6 +49,7 @@ class StateManager {
   _getKey(conditionMap){
     return this._conditionList.reduce((retVal,itm)=>{ 
       let val = conditionMap[itm]?conditionMap[itm]:'*'; 
+      if (val instanceof Array) { val = val.join('/') }
       return  retVal+itm+":"+val+','
     },'').slice(0,-1) 
   }
@@ -71,9 +72,9 @@ class StateManager {
       // 查询的条件 未定义则表示为任意值 
       let val2 = cObj[key] || '*'; 
       
-      // 配置的条件: * 
+      // 配置的条件: * 任意 
       if (val1==='*') { continue; }  
-      // 配置的条件: ! 
+      // 配置的条件: ! 非 
       if (val1[0]==='!') {
         val1 = val1.slice(1);
         // 无法确定包含关系,即不包含,直接跳出 
@@ -82,6 +83,21 @@ class StateManager {
           break;
         }
         if (val1===val2) { 
+          bol = false; 
+          break;
+        }
+        continue;
+      }
+      // 配置的条件: [] 数组 
+      if (val1.includes('/')) {
+        val1 = val1.split('/')
+        // 无法确定包含关系,即不包含,直接跳出 
+        if (val2==='*') {
+          bol = false; 
+          break;
+        }
+        
+        if (!val1.includes(val2)) { 
           bol = false; 
           break;
         }
