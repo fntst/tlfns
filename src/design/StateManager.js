@@ -135,3 +135,6 @@ class StateManager {
 export default StateManager;
 
 
+/* TODO: 
+  条件添加功能 [], 表示条件的多个值 
+*/
