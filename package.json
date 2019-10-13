@@ -1,6 +1,6 @@
 {
   "name": "tlfns",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "frontend tool functions ",
   "main": "src/index.js",
   "directories": {

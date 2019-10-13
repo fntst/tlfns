@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title>getOffset-test</title>
+</head>
+<body>
+  <div id="div1"> </div>
+  <div id="div2"> </div>
+  
+  <button id="btn1" type="button">获取</button>
+  <div class="div"> 
+  </div>
+</body>
+<style >
+  .div { height: 200vh; }
+  #btn1 {
+    position: fixed;
+    top: 0; 
+    right: 0; 
+  }
+  #div1,#div2 {
+    position: absolute;
+    top: 399px;
+    left: 0;
+    width: 100px;
+    height: 100px;
+    background-color: green;
+  }
+  div#div2{
+    top: 100px;
+    left: 100px;
+    background-color: red;
+  }
+</style>
+<script charset="utf-8" type="module">
+  import getOffset from "./getOffset.js";
+  btn1.addEventListener("click",function(evt){
+    
+    // console.log(getOffset(div1,div2));
+    // console.log(getOffset(div1,document.documentElement));
+    // console.log(getOffset(div2,document.documentElement));
+    console.log(div2.getBoundingClientRect().top);
+  })
+</script>
+</html>

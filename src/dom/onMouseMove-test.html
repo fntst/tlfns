@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title>getOffset-test</title>
+</head>
+<body>
+  <div id="div1"> </div>
+  <div id="div2"> </div>
+  
+  <div id="divArea"> 
+    <div class="div div3"> 
+      3
+      <div class="div div5"> 5</div>
+    </div>
+    <div class="div div4"> 4</div>
+    
+    <div class="div" id="moveDiv">
+      
+    </div>
+  </div>
+</body>
+<style >
+  body {
+    height: 300vh;
+  }
+  #divArea { 
+    position: absolute;
+    top: 100px;
+    left: 100px;
+    height: 150vh; 
+    width: 500px;
+    background-color: #ccc;
+  }
+  .div {
+    width: 100px;
+    height: 100px;
+    background-color: blue;
+  }
+  .div3 {
+    
+  }
+  
+  #div1,#div2 {
+    position: absolute;
+    top: 399px;
+    left: 200px;
+    width: 100px;
+    height: 100px;
+    background-color: green;
+    z-index: 100;
+  }
+  div#div2{
+    top: 200px;
+    left: 200px;
+    background-color: red;
+  }
+</style>
+<script charset="utf-8" type="module">
+  import onMouseMove from "./onMouseMove.js";
+  let options = {
+    percent: true,
+    viewport: true,
+    page: true,
+  }
+  onMouseMove(divArea,function(rst){
+    console.log(rst);
+    moveDiv.setAttribute("style",`
+      position: absolute;
+      top: ${rst.top-3}%;
+      left: ${rst.lft-3}%;
+    `)
+  },options)
+</script>
+</html>
+
+
