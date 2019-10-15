@@ -61,19 +61,41 @@
 </style>
 <script charset="utf-8" type="module">
   import Scroll from "./Scroll.js";
-  let options = { }
-  let scroll = new Scroll(options)
-  scroll.on(divArea,function(cb){
-    console.log('# scroll ',flg);
-    if (flg!==1) { return ; }
-    
-    console.log(flg);
-    setTimeout(()=>{
-      console.log('ready');
-      scroll.next(); 
+  let scroll = new Scroll(divArea,true)
+  scroll.onScroll(function(next,val){
+    console.log('#s# running',val);
+  
+    next(); 
+  },50)
+  scroll.onScroll(function(next,val){
+    console.log('#s- running',val);
+  
+    next(); 
+  },50,'reduce')
+  scroll.onScroll(function(next,val){
+    console.log('#s+ running',val);
+  
+    next(); 
+  },50,'growth')
+  
+  scroll.onBegin(function(next,val){
+    console.log('#b running',val);
+  
+    setTimeout(()=>{ 
+      next(); 
+      console.log('b next');
     },2000)
-  })
-  console.log(scroll);
+  },50)
+  
+  scroll.onEnd(function(next,val){
+    console.log('#e running',val);
+  
+    setTimeout(()=>{ 
+      next(); 
+      console.log('e next');
+    },2000)
+  },50)
+  
   
 </script>
 </html>

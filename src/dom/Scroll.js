@@ -9,126 +9,130 @@
 */
 
 class Scroll {
-  /* @params options     obj,可选,配置选项 <=> {
-    isHoriz: bol,       // 是否水平滚动,默认:false,垂直滚动 
-    scrollingDis: num,  // 滚动过程中的触发距离,默认:3
-    scrollTopSec: num,  // type=1时设置,滚动到顶部的触发区间,默认:10 
-    scrollBtmSec: num,  // type=2时设置,滚动到底部的触发区间,默认:10 
-  }
+  /* 
+  @params elemTarget  Element,监听的滚动目标元素 
+  @params isVertical  bol,是否为垂直滚动 
   */
-  constructor({isHoriz=false, scrollingDis=3, scrollTopSec=10, scrollBtmSec=10}){ 
-    // this.isHoriz = isHoriz; 
-    this.startVal = 'scrollTop'
+  constructor(elemTarget,isVertical=true){ 
+    this.initVal = 'scrollTop'
     this.clientVal = 'clientHeight'
     this.totalVal = 'scrollHeight'
-    if (isHoriz) {
-      this.startVal = 'scrollLeft'
+    if (!isVertical) {
+      this.initVal = 'scrollLeft'
       this.clientVal = 'clientWidth'
       this.totalVal = 'scrollWidth'
     }
-    this.scrollingDis = scrollingDis; 
     
-    this.scrollTopSec = scrollTopSec; 
-    this.scrollBtmSec = scrollBtmSec; 
+    this.elem = elemTarget
     
-    this.isRun0 = true; 
-    this.isRun1 = true; 
-    this.isRun2 = true; 
+    // 记录前一滚动位置,用来区分滚动方向 
     this.currentVal = 0; 
+    let that = this; 
+    elemTarget.addEventListener("scroll",function(evt){
+      setTimeout(()=>{ that.currentVal = this[that.initVal]; ; })
+    })
   }
   
   /* 
-  @params elemTarget  Element,监听的滚动目标元素 
-  @params type        0/1/2,触发的类型  
-    0  滚动过程中 
-    1  滚动到顶部/左边触发 
-    2  滚动到底部/右边触发 
   @params callback    fn(next),触发时的回调 
     next  fn,调用方法才后续才可能继续触发下一次滚动,否则滚动回调在next执行前不会执行 
+    val   num,当前的滚动值 
+  @params distance    num,滚动的触发距离,unit:px 
+  @params direction   KW,触发的滚动方向 
+    'double' 双向,默认值
+    'reduce' 滚动量减少的方向 
+    'growth' 滚动量增加的方向
   */
-  on(elemTarget,type,callback){
+  onScroll(callback,distance=3,direction='double'){ 
     let that = this; 
     
-    elemTarget.addEventListener("scroll",function(evt){
-      let scrollVal = this[that.startVal]; 
-      if ( Math.abs(scrollVal-that.currentVal)<that.scrollingDis || !that.isRun ) { return ; }
+    if (direction==='reduce') {
+      let isRun = true; 
+      let preVal = 0; // 用来判断滚动距离是否达到指定值 
+      this.elem.addEventListener("scroll",function(evt){
+        let scrollVal = this[that.initVal]; 
+        let isDire = scrollVal-that.currentVal<0;
+        let delta = preVal-scrollVal; 
+        if (!isDire) { preVal = scrollVal; }
+        if ( !isRun || !isDire || delta<=distance ) { return ; }
+        isRun = false;
+        preVal = scrollVal; 
+        
+        callback(()=>{ isRun = true; },scrollVal);
+      })
+    }
+    else if (direction==='growth') {
+      let isRun = true; 
+      let preVal = 0; // 用来判断滚动距离是否达到指定值 
+      this.elem.addEventListener("scroll",function(evt){
+        let scrollVal = this[that.initVal]; 
+        let isDire = scrollVal-that.currentVal>0;
+        let delta = scrollVal - preVal; 
+        if (!isDire) { preVal = scrollVal; }
+        if ( !isRun || !isDire || delta<=distance ) { return ; }
+        isRun = false;
+        preVal = scrollVal; 
+        
+        callback(()=>{ isRun = true; },scrollVal);
+      })
+    }
+    else {
+      let isRun = true; 
+      let preVal = 0; // 用来判断滚动距离是否达到指定值 
+      this.elem.addEventListener("scroll",function(evt){
+        let scrollVal = this[that.initVal]; 
+        // let delta = scrollVal-that.currentVal;
+        // Math.abs(delta)<=distance
+        if ( !isRun || Math.abs(scrollVal-preVal)<=distance ) { return ; }
+        isRun = false;
+        preVal = scrollVal; 
+        
+        callback(()=>{ isRun = true; },scrollVal);
+      })
+    }
+  }
+  
+  /* 
+  向上滚动
+  @params callback    fn(next),触发时的回调 
+    next  fn,调用方法才后续才可能继续触发下一次滚动,否则滚动回调在next执行前不会执行 
+  @params distance    num,滚动到起始位置的触发区间,unit:px 
+  */
+  onBegin(callback,distance=10){ 
+    let that = this; 
+    let isRun = true; 
+    this.elem.addEventListener("scroll",function(evt){
+      let scrollVal = this[that.initVal]; 
+      let delta = that.currentVal - scrollVal;
+      if ( !isRun || delta<=0 || scrollVal>=distance ) { return ; }
+      isRun = false; 
       
-      that.currentVal = scrollVal; 
-      
-      // 滚动触发 
-      callback();
-      // 顶部滚动触发 
-      if ( scrollVal<=that.scrollTopSec ) {
-        // 防止出现滚动条贴顶 
-        let sv = 0.1;
-        if (scrollVal===0) { 
-          this[that.startVal] = sv; 
-        } 
-        callback()
-        that.isRun = false; 
-      }
-      // 底部滚动触发 
-      let scroll1 = this[that.totalVal]; 
-      let client2 = this[that.clientVal]; 
-      if ( scroll1 - client2 - scrollVal <= that.scrollBtmSec ) {
-        callback()
-        that.isRun = false; 
-      }
-      
+      // 防止出现滚动条贴顶 
+      if (scrollVal===0) { this[that.initVal] = 0.1; } 
+      callback(()=>{ isRun = true; },scrollVal)
     })
-    elemTarget.addEventListener("scroll",function(evt){
-      let scrollVal = this[that.startVal]; 
-      if ( Math.abs(scrollVal-that.currentVal)<that.scrollingDis || !that.isRun ) { return ; }
-      
-      that.currentVal = scrollVal; 
-      
-      // 滚动触发 
-      callback();
-      // 顶部滚动触发 
-      if ( scrollVal<=that.scrollTopSec ) {
-        // 防止出现滚动条贴顶 
-        let sv = 0.1;
-        if (scrollVal===0) { 
-          this[that.startVal] = sv; 
-        } 
-        callback()
-        that.isRun = false; 
-      }
-      // 底部滚动触发 
+  }
+  
+  /* 
+  向下滚动
+  @params callback    fn(next),触发时的回调 
+    next  fn,调用方法才后续才可能继续触发下一次滚动,否则滚动回调在next执行前不会执行 
+  @params distance    num,滚动到终止位置的触发区间,unit:px 
+  */
+  onEnd(callback,distance=10){ 
+    let that = this; 
+    let isRun = true; 
+    
+    this.elem.addEventListener("scroll",function(evt){
+      let scrollVal = this[that.initVal]; 
+      let delta = scrollVal - that.currentVal;
       let scroll1 = this[that.totalVal]; 
       let client2 = this[that.clientVal]; 
-      if ( scroll1 - client2 - scrollVal <= that.scrollBtmSec ) {
-        callback()
-        that.isRun = false; 
-      }
+      let restVal = scroll1 - client2 - scrollVal;
+      if ( !isRun || delta<=0 || restVal>=distance ) { return ; }
+      isRun = false; 
       
-    })
-    elemTarget.addEventListener("scroll",function(evt){
-      let scrollVal = this[that.startVal]; 
-      if ( Math.abs(scrollVal-that.currentVal)<that.scrollingDis || !that.isRun ) { return ; }
-      
-      that.currentVal = scrollVal; 
-      
-      // 滚动触发 
-      callback();
-      // 顶部滚动触发 
-      if ( scrollVal<=that.scrollTopSec ) {
-        // 防止出现滚动条贴顶 
-        let sv = 0.1;
-        if (scrollVal===0) { 
-          this[that.startVal] = sv; 
-        } 
-        callback()
-        that.isRun = false; 
-      }
-      // 底部滚动触发 
-      let scroll1 = this[that.totalVal]; 
-      let client2 = this[that.clientVal]; 
-      if ( scroll1 - client2 - scrollVal <= that.scrollBtmSec ) {
-        callback()
-        that.isRun = false; 
-      }
-      
+      callback(()=>{ isRun = true; },scrollVal)
     })
   }
 }
