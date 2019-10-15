@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title>Scroll-test</title>
+</head>
+<body>
+  <button id="btn1" type="button">button</button>
+  <div id="div1"> </div>
+  <div id="div2"> </div>
+  
+  <div id="divArea"> 
+    <div class="div div3"> 
+      3
+      <div class="div div5"> 5</div>
+    </div>
+    <div class="div div4"> 4</div>
+    
+    <div class="div" id="moveDiv">
+      
+    </div>
+  </div>
+</body>
+<style >
+  #btn1 {
+    position: fixed;
+    top: 0; 
+    right: 0;
+  }
+  #div1,#div2 {
+    position: absolute;
+    top: 399px;
+    left: 200px;
+    width: 100px;
+    height: 100px;
+    background-color: green;
+    z-index: 100;
+  }
+  div#div2{
+    top: 200px;
+    left: 200px;
+    background-color: red;
+  }
+  
+  #divArea { 
+    position: absolute;
+    top: 100px;
+    left: 100px;
+    height: 50vh; 
+    width: 500px;
+    background-color: #ccc;
+    overflow: scroll;
+  }
+  .div {
+    position: absolute;
+    width: 100px;
+    height: 100vh;
+    background-color: blue;
+  }
+  .div3 { }
+</style>
+<script charset="utf-8" type="module">
+  import Scroll from "./Scroll.js";
+  let options = { }
+  let scroll = new Scroll(options)
+  scroll.on(divArea,function(cb){
+    console.log('# scroll ',flg);
+    if (flg!==1) { return ; }
+    
+    console.log(flg);
+    setTimeout(()=>{
+      console.log('ready');
+      scroll.next(); 
+    },2000)
+  })
+  console.log(scroll);
+  
+</script>
+</html>
+
+
