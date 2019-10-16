@@ -1,4 +1,8 @@
 // 查询参数对象化  
+/* 
+@params  search  str,查询参数字符,
+  如: ?key1=11&key2=22 或者 key1=11&key2=22 
+*/
 export function dealQuery(search){ 
   let result = {};
   let str = search;
