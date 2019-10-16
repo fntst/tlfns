@@ -34,6 +34,46 @@ class Scroll {
   }
   
   /* 
+  到开始位置 
+  @params isSlow  bol,是否缓慢滚动到结束位置 
+  */
+  toBegin(isSlow=true){ 
+    if (isSlow) {
+      
+    }
+    else { this.elem[this.initVal] = 0; }
+  }
+  // scrollToTop(num){
+  //   this.isScrolling = true;
+  //   // console.log('1',num);
+  //   if ( num <= 0 ) { 
+  //     this.scrollElem.scrollTop = 0;
+  //     this.isShow = false;
+  //     this.isScrolling = false;
+  //     return ; 
+  //   }
+  // 
+  //   this.scrollElem.scrollTop = num;
+  //   setTimeout(()=>{
+  //     this.scrollToTop( num/2 - 1 );
+  //   },55)
+  // },
+
+  /* 
+  到结束位置 
+  @params isSlow  bol,是否缓慢滚动到结束位置 
+  */
+  toEnd(isSlow=true){ 
+  }
+  // /* 
+  // 缓慢滚动到指定位置
+  // 效果: 每次滚动剩余位置的一半,
+  // */
+  // slowToPos(pos){
+  // 
+  // }
+  
+  /* 
   @params callback    fn(next),触发时的回调 
     next  fn,调用方法才后续才可能继续触发下一次滚动,否则滚动回调在next执行前不会执行 
     val   num,当前的滚动值 
@@ -93,7 +133,7 @@ class Scroll {
   }
   
   /* 
-  向上滚动
+  向开始位置滚动
   @params callback    fn(next),触发时的回调 
     next  fn,调用方法才后续才可能继续触发下一次滚动,否则滚动回调在next执行前不会执行 
   @params distance    num,滚动到起始位置的触发区间,unit:px 
@@ -114,7 +154,7 @@ class Scroll {
   }
   
   /* 
-  向下滚动
+  向终点位置滚动
   @params callback    fn(next),触发时的回调 
     next  fn,调用方法才后续才可能继续触发下一次滚动,否则滚动回调在next执行前不会执行 
   @params distance    num,滚动到终止位置的触发区间,unit:px 
