@@ -1,28 +1,30 @@
 
 // 选取本地文件 
+/* 
+@params  multiple     bol,是否可多选 
+@params  accept       bol,可选文件类型,可自定义,如: '.pdf,.doc'   
+@params  limitNum     num,一次最多可选数量  
+@params  limitSize    num,最大文件体积,unit:B,默认:10M 
+@params  base64       bol,是否返回base64 
+
+@params  url          str,上传地址 
+@params  uploadField  str,文件上传字段 
+*/
 class LocalFiles {
-  constructor(options={}){ 
-    // if (!document) { return new Error("document is not defined") }
+  constructor({
+    multiple=true,
+    accept="*",
+    limitNum=99,
+    limitSize=1024*1024*10,
+    base64=false, 
     
-    let {
-      multiple=true,  // 是否多选 
-      accept='*',             // 可选文件类型,可自定义,如: '.pdf,.doc' 
-      limitNum=99,            // 一次最多可选数量 
-      limitSize=10*1024*1024, // 最大文件体积10M,unit:B 
-      base64=false, // 是否返回base64 
-      
-      url='',              // 上传地址 
-      uploadField='',      // 文件上传字段
-    } = options;
-    this.options = { 
-      multiple, 
-      accept, 
-      limitNum, 
-      limitSize, 
-      base64, 
-      url,  
-      uploadField,  
-    } 
+    url='', 
+    uploadField='', 
+  })
+  { 
+    if (!document) { return new Error("document is not defined") }
+    
+    this.options = { multiple, accept, limitNum, limitSize, base64, url, uploadField, } 
     
     this._fileInput = document.createElement("input"); // 缓存元素  
     this._fileInput.setAttribute("type","file"); 
@@ -190,5 +192,4 @@ class LocalFiles {
 export default LocalFiles;
 
 
-// TODO: 优化 
 
