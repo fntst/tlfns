@@ -5,7 +5,10 @@
   <title>Scroll-test</title>
 </head>
 <body>
-  <button id="btn1" type="button">button</button>
+  <button id="btn1" type="button">up slow</button>
+  <button id="btn2" type="button">up </button>
+  <button id="btn3" type="button">down slow</button>
+  <button id="btn4" type="button">down </button>
   <div id="div1"> </div>
   <div id="div2"> </div>
   
@@ -25,6 +28,21 @@
   #btn1 {
     position: fixed;
     top: 0; 
+    right: 0;
+  }
+  #btn2 {
+    position: fixed;
+    top: 20px; 
+    right: 0;
+  }
+  #btn3 {
+    position: fixed;
+    top: 40px; 
+    right: 0;
+  }
+  #btn4 {
+    position: fixed;
+    top: 60px; 
     right: 0;
   }
   #div1,#div2 {
@@ -62,40 +80,60 @@
 <script charset="utf-8" type="module">
   import Scroll from "./Scroll.js";
   let scroll = new Scroll(divArea,true)
-  scroll.onScroll(function(next,val){
-    console.log('#s# running',val);
+  // scroll.onScroll(function(next,val){
+  //   console.log('#s# running',val);
+  // 
+  //   next(); 
+  // },50)
+  // scroll.onScroll(function(next,val){
+  //   console.log('#s- running',val);
+  // 
+  //   next(); 
+  // },50,'reduce')
+  // scroll.onScroll(function(next,val){
+  //   console.log('#s+ running',val);
+  // 
+  //   next(); 
+  // },50,'growth')
   
-    next(); 
-  },50)
-  scroll.onScroll(function(next,val){
-    console.log('#s- running',val);
+  // scroll.onBegin(function(next,val){
+  //   console.log('#b running',val);
+  // 
+  //   setTimeout(()=>{ 
+  //     next(); 
+  //     console.log('b next');
+  //   },2000)
+  // },50)
   
-    next(); 
-  },50,'reduce')
-  scroll.onScroll(function(next,val){
-    console.log('#s+ running',val);
+  // scroll.onEnd(function(next,val){
+  //   console.log('#e running',val);
+  // 
+  //   setTimeout(()=>{ 
+  //     next(); 
+  //     console.log('e next');
+  //   },2000)
+  // },50)
   
-    next(); 
-  },50,'growth')
-  
-  scroll.onBegin(function(next,val){
-    console.log('#b running',val);
-  
-    setTimeout(()=>{ 
-      next(); 
-      console.log('b next');
-    },2000)
-  },50)
-  
-  scroll.onEnd(function(next,val){
-    console.log('#e running',val);
-  
-    setTimeout(()=>{ 
-      next(); 
-      console.log('e next');
-    },2000)
-  },50)
-  
+  btn1.addEventListener("click",function(evt){
+    scroll.toBegin(function(){
+      console.log('# begin slow');
+    })
+  })
+  btn2.addEventListener("click",function(evt){
+    scroll.toBegin(function(){
+      console.log('# begin');
+    },false)
+  })
+  btn3.addEventListener("click",function(evt){
+    scroll.toEnd(function(){
+      console.log('# end slow');
+    })
+  })
+  btn4.addEventListener("click",function(evt){
+    scroll.toEnd(function(){
+      console.log('# end ');
+    },false)
+  })
   
 </script>
 </html>

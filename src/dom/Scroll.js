@@ -14,64 +14,98 @@ class Scroll {
   @params isVertical  bol,是否为垂直滚动 
   */
   constructor(elemTarget,isVertical=true){ 
-    this.initVal = 'scrollTop'
-    this.clientVal = 'clientHeight'
-    this.totalVal = 'scrollHeight'
-    if (!isVertical) {
-      this.initVal = 'scrollLeft'
-      this.clientVal = 'clientWidth'
-      this.totalVal = 'scrollWidth'
-    }
-    
     this.elem = elemTarget
+    
+    this.beginProp = 'scrollTop'
+    this.clientProp = 'clientHeight'
+    this.totalProp = 'scrollHeight'
+    if (!isVertical) {
+      this.beginProp = 'scrollLeft'
+      this.clientProp = 'clientWidth'
+      this.totalProp = 'scrollWidth'
+    }
     
     // 记录前一滚动位置,用来区分滚动方向 
     this.currentVal = 0; 
     let that = this; 
     elemTarget.addEventListener("scroll",function(evt){
-      setTimeout(()=>{ that.currentVal = this[that.initVal]; ; })
+      setTimeout(()=>{ that.currentVal = this[that.beginProp]; ; })
     })
   }
   
+  
   /* 
   到开始位置 
-  @params isSlow  bol,是否缓慢滚动到结束位置 
+  @params isSlow    bol,是否缓慢滚动到开始位置 
+  @params callback  fn,滚动到开始位置后触发 
   */
-  toBegin(isSlow=true){ 
+  toBegin(callback,isSlow=true){ 
     if (isSlow) {
-      
+      this._slow2Begin(this.elem[this.beginProp],callback);
     }
-    else { this.elem[this.initVal] = 0; }
+    else { 
+      this.elem[this.beginProp] = 0; 
+      callback();
+    }
   }
-  // scrollToTop(num){
-  //   this.isScrolling = true;
-  //   // console.log('1',num);
-  //   if ( num <= 0 ) { 
-  //     this.scrollElem.scrollTop = 0;
-  //     this.isShow = false;
-  //     this.isScrolling = false;
-  //     return ; 
-  //   }
-  // 
-  //   this.scrollElem.scrollTop = num;
-  //   setTimeout(()=>{
-  //     this.scrollToTop( num/2 - 1 );
-  //   },55)
-  // },
-
+  _slow2Begin(num,cb){
+    // console.log('#1');
+    if ( num <= 0 ) { 
+      this.elem[this.beginProp] = 0; 
+      cb();
+      return ; 
+    }
+  
+    this.elem[this.beginProp] = num; 
+    setTimeout(()=>{
+      this._slow2Begin( num/2 - 3, cb );
+    },55)
+  }
   /* 
   到结束位置 
-  @params isSlow  bol,是否缓慢滚动到结束位置 
+  @params isSlow    bol,是否缓慢滚动到结束位置 
+  @params callback  fn,滚动到结束位置时触发 
   */
-  toEnd(isSlow=true){ 
+  toEnd(callback,isSlow=true){ 
+    let endVal = this.elem[this.totalProp]-this.elem[this.clientProp]
+    let currentVal = this.elem[this.beginProp]
+    if (isSlow) {
+      this._slow2End(currentVal,endVal,callback)
+    }
+    else {
+      this.elem[this.beginProp] = endVal;
+      callback();
+    }
   }
-  // /* 
-  // 缓慢滚动到指定位置
-  // 效果: 每次滚动剩余位置的一半,
-  // */
-  // slowToPos(pos){
-  // 
-  // }
+  _slow2End(currentV,totalV,cb){
+    // console.log('#2');
+    if ( currentV >= totalV ) { 
+      this.elem[this.beginProp] = totalV; 
+      cb();
+      return ; 
+    }
+    
+    let nextV = currentV + (totalV-currentV)/2 + 3;
+    this.elem[this.beginProp] = nextV; 
+    setTimeout(()=>{
+      this._slow2End(nextV,totalV,cb);
+    },55)
+  }
+  /* 待优化: 
+  _slow2Pos(beginV,endV,cb){
+    if ( num <= 0 ) { 
+      this.elem[this.beginProp] = 0; 
+      cb();
+      return ; 
+    }
+  
+    this.elem[this.beginProp] = num; 
+    setTimeout(()=>{
+      this._slow2Pos( num/2 - 3, cb );
+    },55)
+  },
+  */
+
   
   /* 
   @params callback    fn(next),触发时的回调 
@@ -90,7 +124,7 @@ class Scroll {
       let isRun = true; 
       let preVal = 0; // 用来判断滚动距离是否达到指定值 
       this.elem.addEventListener("scroll",function(evt){
-        let scrollVal = this[that.initVal]; 
+        let scrollVal = this[that.beginProp]; 
         let isDire = scrollVal-that.currentVal<0;
         let delta = preVal-scrollVal; 
         if (!isDire) { preVal = scrollVal; }
@@ -105,7 +139,7 @@ class Scroll {
       let isRun = true; 
       let preVal = 0; // 用来判断滚动距离是否达到指定值 
       this.elem.addEventListener("scroll",function(evt){
-        let scrollVal = this[that.initVal]; 
+        let scrollVal = this[that.beginProp]; 
         let isDire = scrollVal-that.currentVal>0;
         let delta = scrollVal - preVal; 
         if (!isDire) { preVal = scrollVal; }
@@ -120,7 +154,7 @@ class Scroll {
       let isRun = true; 
       let preVal = 0; // 用来判断滚动距离是否达到指定值 
       this.elem.addEventListener("scroll",function(evt){
-        let scrollVal = this[that.initVal]; 
+        let scrollVal = this[that.beginProp]; 
         // let delta = scrollVal-that.currentVal;
         // Math.abs(delta)<=distance
         if ( !isRun || Math.abs(scrollVal-preVal)<=distance ) { return ; }
@@ -142,13 +176,13 @@ class Scroll {
     let that = this; 
     let isRun = true; 
     this.elem.addEventListener("scroll",function(evt){
-      let scrollVal = this[that.initVal]; 
+      let scrollVal = this[that.beginProp]; 
       let delta = that.currentVal - scrollVal;
       if ( !isRun || delta<=0 || scrollVal>=distance ) { return ; }
       isRun = false; 
       
       // 防止出现滚动条贴顶 
-      if (scrollVal===0) { this[that.initVal] = 0.1; } 
+      if (scrollVal===0) { this[that.beginProp] = 0.1; } 
       callback(()=>{ isRun = true; },scrollVal)
     })
   }
@@ -164,10 +198,10 @@ class Scroll {
     let isRun = true; 
     
     this.elem.addEventListener("scroll",function(evt){
-      let scrollVal = this[that.initVal]; 
+      let scrollVal = this[that.beginProp]; 
       let delta = scrollVal - that.currentVal;
-      let scroll1 = this[that.totalVal]; 
-      let client2 = this[that.clientVal]; 
+      let scroll1 = this[that.totalProp]; 
+      let client2 = this[that.clientProp]; 
       let restVal = scroll1 - client2 - scrollVal;
       if ( !isRun || delta<=0 || restVal>=distance ) { return ; }
       isRun = false; 
