@@ -10,14 +10,20 @@ http请求封装
 import axios from "axios";
 import { Loading, MessageBox } from 'element-ui';
 
+// loading相关操作 
+let loadingInstance = null; // 
 // 显示loading 
 function loadingShow(){ 
+  loadingInstance = Loading.service({ text, background: 'rgba(0,0,0,0.2)', });
 }
 // 隐藏loading 
 function loadingHide(){ 
+  loadingInstance && loadingInstance.close();
 }
+
 // 显示提示弹窗 
-function alertShow(){ 
+function alertShow(message){ 
+  MessageBox.alert({ type: 'error', title: '接口提示', message, });
 }
 
 // 是否请求成功判断 
@@ -34,39 +40,40 @@ function getErrorMsg(result){
   let {data,status,statusText,headers,request,config,} = result; 
   
   // 接口定义 
-  console.log(result,data);
+  // console.log(result,data);
   return data.errmsg || statusText;
 }
 
 
 let request = ({
-  url='/',          // str,请求地址 
-  
-  data={},          // jsonObj,请求数据 
-  query={},         // obj,请求查询键值对
-  file=null,        // obj,上传文件对象 
-  fileField="file", // str,文件上传字段 
-  
   method="post",    // post/get,请求方法 
-  
+  url='/',          // str,请求地址 
+  query={},         // obj,请求查询键值对
   headers={},       // obj,请求头键值对 
   
   timeout=60*1000,  // num,请求超时,unit:s 
   
-  loading=true,           // bol,是否使用loading 
+  // data 和 file 二选一 
+  data={},          // jsonObj,请求数据 
+  fileList=[],      // obj,上传的文件列表,成员为文件对象 
+  fileField="file", // str,文件上传字段 
+  
+  loading=true,            // bol,是否使用loading 
   loadingText='加载中...', // str,loading文案 
-  alert=true,             // bol,是否请求出错后提示 
+  alert=true,              // bol,是否请求出错后提示 
   
 })=>
 {
-  let loadingInstance = null; // 
-  if (loading) {
-    loadingInstance = Loading.service({
-      text: loadingText,
-      background: 'rgba(0,0,0,0.2)',
-    });
+  let reqData = data; 
+  if (fileList && fileList.length>0) {
+    let fd = new FormData();
+    fileList.forEach(file=>{
+      fd.append(fileField,file,file.name)
+    })
+    reqData = fd; 
   }
-  return axios({ url, data, params: query, method, headers, timeout, })
+  loading && loadingShow(loadingText);
+  return axios({ method, url, params:query, headers, data:reqData, timeout })
   .then(response=>{
     // console.log(response);
     
@@ -78,22 +85,18 @@ let request = ({
   .catch(errMsg=>{
     console.warn(errMsg);
     
-    alert && MessageBox.alert({
-      title: '提示',
-      type: 'error',
-      message: errMsg,
-    });
+    alert && alertShow(errMsg); 
     return Promise.reject(errMsg);
   })
   .finally(()=>{
-    loading && loadingInstance && loadingInstance.close();
+    loading && loadingHide()
   });
 }
 
 export default request;
 
 
-// TODO 
+// TODO: 待测试  
 
 
 
