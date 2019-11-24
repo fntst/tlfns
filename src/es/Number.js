@@ -62,7 +62,16 @@ export function preciseCalc1(type,num1,num2,decimal){
 方式2: 转换成数组进行模拟运算  
 */
 // 单位数乘多位数 
-function multiply(arr1,arr2,d1,d2){
+function multiply(num,arr){
+  let n = 0; 
+  let result = arr.map( (itm,idx)=>{
+    let val = itm*num; 
+    val += n;
+    n = Math.floor(val/10); 
+    return val %= 10; 
+  })
+  if (n!==0) { result.push(n); }
+  return result;
 }
 export function preciseCalc2(type,num1,num2,decimal){
   /* 
@@ -75,26 +84,17 @@ export function preciseCalc2(type,num1,num2,decimal){
     '+': function(arr1,arr2,d1,d2){ 
       if (!arr1.isNegative && !arr2.isNegative) {
         let d = Math.max(d1,d2)
-        let isUp = false; 
+        let upN = 0; 
         let result = arr1.map((itm,idx)=>{
-          let val = itm*1; 
-          let itm2 = arr2[idx]*1;
-          if (itm2) { val += itm2; }
-          if (isUp) { 
-            val++; 
-            isUp = false;
-          }
-          if (val>9) {
-            val -= 10; 
-            if (arr1[idx+1]!==undefined) { isUp = true; }
-            else { arr1.push(1) }
-          }
+          let val = itm*1 + arr2[idx]*1;
+          val += upN; 
+          upN = Math.floor(val/10); 
+          val %= 10; 
           return val; 
         }).reverse() 
         if (d!==0) { result.splice(-d,0,'.') }
-        return result.reduce((retVal,itm,idx)=>{ 
-          return  retVal+itm;
-        },'') *1 
+        return result.reduce((retVal,itm)=>retVal+itm, '') * 1  + 
+          upN * Math.pow(10, arr1.length-d1 )
       }
       else if (arr1.isNegative && arr2.isNegative) {
         arr1.isNegative = false; 
@@ -115,30 +115,17 @@ export function preciseCalc2(type,num1,num2,decimal){
     '-': function(arr1,arr2,d1,d2){ 
       if (!arr1.isNegative && !arr2.isNegative) {
         let d = Math.max(d1,d2)
-        let isDown = false; 
+        let downN = 0; 
         let result = arr1.map((itm,idx)=>{
-          let val = itm*1; 
-          let itm2 = arr2[idx]*1;
-          if (itm2) { val -= itm2; }
-          if (isDown) { 
-            val--; 
-            isDown = false;
-          }
-          if (val<0) {
-            val += 10; 
-            if (arr1[idx+1]!==undefined) { isDown = true; }
-            else { arr1.push(-1) }
-          }
+          let val = itm*1 - arr2[idx]*1;
+          val += downN; 
+          downN = Math.floor(val/10); 
+          val = (val+10)%10
           return val; 
         }).reverse() 
         if (d!==0) { result.splice(-d,0,'.') }
-        result = result.reduce((retVal,itm,idx)=>{ 
-          return  retVal+itm;
-        },'') 
-        if (arr1.pop()<0) {
-          result = result - Math.pow(10,result.split('.')[0].length)
-        }
-        return result*1; 
+        return result.reduce((retVal,itm)=>retVal+itm, '')*1 + 
+          downN * Math.pow(10,arr1.length-d1)
       }
       else if (arr1.isNegative && arr2.isNegative) {
         arr1.isNegative = false; 
@@ -170,6 +157,8 @@ export function preciseCalc2(type,num1,num2,decimal){
   let d2 = getDecimal(num2); 
   
   let arr1 = num1.toString().replace(".", "").split('').reverse()
+  let arr2 = num2.toString().replace(".", "").split('').reverse()
+  // 去除符号,作为标记存储  
   if (num1<0) {
     arr1.pop()
     arr1.isNegative = true; 
@@ -177,7 +166,6 @@ export function preciseCalc2(type,num1,num2,decimal){
   else {
     arr1.isNegative = false; 
   }
-  let arr2 = num2.toString().replace(".", "").split('').reverse()
   if (num2<0) {
     arr2.pop()
     arr2.isNegative = true; 
@@ -185,6 +173,7 @@ export function preciseCalc2(type,num1,num2,decimal){
   else {
     arr2.isNegative = false; 
   }
+  // 将小数位个数相等 
   let delta = d1 - d2; 
   if (delta>0) {
     while (delta>0) {
@@ -196,6 +185,20 @@ export function preciseCalc2(type,num1,num2,decimal){
     while (delta<0) {
       delta++;
       arr1.unshift(0)
+    }
+  }
+  // 将整体长度相等 
+  delta = arr1.length - arr2.length; 
+  if (delta>0) {
+    while (delta>0) {
+      delta--;
+      arr2.push(0)
+    }
+  }
+  else if (delta<0) {
+    while (delta<0) {
+      delta++;
+      arr1.push(0)
     }
   }
   
