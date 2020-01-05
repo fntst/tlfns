@@ -15,7 +15,7 @@ function paging(root, elems, pageH, offsetTop, isAddGap=true){
     root.style.position = 'relative'
   }
   
-  // 页面间隙 
+  // 添加页面间隙 
   let pageGapH = 10; 
   if (isAddGap) {
     // 增加分页线 
@@ -49,7 +49,8 @@ function paging(root, elems, pageH, offsetTop, isAddGap=true){
     })
   }
   
-  function pageOne(els,idx){
+  // 偏移元素,避免被页面分割 
+  function offsetEl(els,idx){
     let el = els[idx]
     if (!el) { return; }
     
@@ -74,10 +75,15 @@ function paging(root, elems, pageH, offsetTop, isAddGap=true){
       el.insertAdjacentHTML('beforebegin',`<div class="_offset_" style="height:${offset}px;"> </div>`);
     }
     
-    pageOne(els,idx+1)
-    
+    offsetEl(els,idx+1)
   } 
-  pageOne(elems,0,0);
+  offsetEl(elems,0,0);
+  
+  // TODO: 分割元素到两个页面中 
+  // 方法: 将被分割的元素A复制一份记为B, 
+  // 通过B定位来向下偏移(分页间隙+下边距+上边距) 
+  // 通过内层元素负边距来实现内容位置调整 
+  // 使用一背景色元素覆盖作为间隙 
 } 
 
 
