@@ -1,5 +1,11 @@
-// 文本复制 
 
+/** 文本复制 
+  * Describe: 文本复制 
+  * @Params:  text str,待复制的文本  
+  * @Return:  Promise->(txt)/(err),返回复制是否成功的pms 
+    txt  str,复制成功的文本 
+    err  str,失败的提示文本 
+  */
 let copyText = (function(){
   // 获取用于复制的 textarea [input无法复制换行符] 
   let copyElem = document.createElement("textarea");
