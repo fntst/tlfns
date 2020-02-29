@@ -1,7 +1,7 @@
 {
-  "name": "tlfns",
-  "version": "0.0.13",
-  "description": "frontend tool functions ",
+  "name": "zkits",
+  "version": "0.0.1",
+  "description": "frontend tools",
   "main": "src/index.js",
   "directories": {
     "test": "test"
@@ -11,18 +11,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fntst/tlfns.git"
+    "url": "git+https://github.com/fntst/zkits.git"
   },
   "keywords": [
     "tools",
+    "kit",
+    "kits",
+    "lib",
     "functions",
-    "frontend",
-    "lib"
+    "frontend"
   ],
   "author": "fntst",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/fntst/tlfns/issues"
+    "url": "https://github.com/fntst/zkits/issues"
   },
-  "homepage": "https://github.com/fntst/tlfns#readme"
+  "homepage": "https://github.com/fntst/zkits#readme"
 }

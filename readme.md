@@ -1,26 +1,28 @@
-<h1>FrontEnd Tool Functions</h1>
-<h2>前端常用工具函数库</h2>
+<h1> zkits JS功能/工具集 </h1>
 
+<div>tips: 继承自 tlfns npm模块(tlfns本人已不再维护)</div>
 
+<br/>
 安装: 
+
 ``` 
-$ npm i -S tlfns 
+$ npm i -S zkits 
 ```
 
 
 使用方式: 
 ```
 // 引入指定功能 
-import xxx from "tlfns/src/xx/xxx.js";
+import xxx from "zkits/src/xx/xxx.js";
 或 
-import 'tlfns/src/xx/xxx.js';  // 引入无变量导出的某些功能 
+import 'zkits/src/xx/xxx.js';  // 引入无变量导出的某些功能 
 ```
 
 <h1> 功能列表文档: </h1>
 
 ◆无变量导出的预设功能: 
 ```
-import 'tlfns/src/dom/EventTarget-noexport.js';  
+import 'zkits/src/dom/EventTarget-noexport.js';  
 EventTarget
   .addListener(evtName,listener,immediateWay)  // 绑定事件监听 
     evtName       str,事件名称 
@@ -34,7 +36,7 @@ EventTarget
     data?     any,可选,传递的数据,在 evt.msg 中获取  
     emitWay?  0/1,触发方式,默认:0 原生触发方式 
     
-import 'tlfns/src/es/Object-noexport.js';  
+import 'zkits/src/es/Object-noexport.js';  
 Object
   .forEach((val,key)=>{})        // 对象遍历 
   .map((val,key)=>{})            // 返回一新对象,键的值由回调返回值确定 
@@ -103,7 +105,7 @@ onConsoleOpen(callback)                  // 监听控制台打开
 
 ◆其他功能: 
 ```
-import LocalFiles from 'tlfns/src/utils/LocalFiles.js';  
+import LocalFiles from 'zkits/src/utils/LocalFiles.js';  
 LocalFiles  本地文件上传 
   let localFiles = new LocalFiles({
     // 配置项可选,默认值如下:  
@@ -160,13 +162,6 @@ adapt(sizeList,root,outMinHandle,outMaxHandle)  // 用于移动端页面布局
 
 import StateManager from './src/design/StateManager.js';  
 StateManager: 状态<=>控制 条件配置化 
-场景: 
-  当业务复杂,一个功能是否可用或一个UI元素的显示控制或逻辑操作,需要多个状态/条件值来确定,
-  而大量存在该场景时,若每次都条件来组合判断,冗余且逻辑散落未集中管理,导致开发、维护困难 
-  
-  场景需求: 多对多, 多个条件对多个操作 
-  对象存储: 一对多, 多个条件合并为一个对应多个操作 
-  对象查询: 多对一, 多个条件合并为一个查询指定一个操作 
 解决方案: 
   将需要组合的条件配置化,集中管理,
   通过一函数传入条件来进行判断, 
