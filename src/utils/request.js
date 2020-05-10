@@ -1,51 +1,26 @@
-/* 
-http请求封装 
-功能: 
-  自动处理接口的响应 成功/失败 
-  请求loading 
-  文件上传 
-注: 依赖 axios ElementUI/MintUI 
-*/
 
+/*** http请求封装 
+* @params  xxx  type,参数说明
+* @return  type,返回值说明 
+* -----------------------------
+* @author  fsl 
+* @time    2020年5月10日 19:46:11  
+* -----------------------------
+* @detail  
+* 01 自动处理接口的响应 成功/失败 
+* 02 请求loading 
+* 03 文件上传 
+* 注: 依赖 axios ElementUI/MintUI 
+* -----------------------------
+* @update  
+* 时间值 更新说明 
+*/
 import axios from "axios";
 import { Loading, MessageBox } from 'element-ui';
 
 // loading相关操作 
 let loadingInstance = null; // 
-// 显示loading 
-function loadingShow(){ 
-  loadingInstance = Loading.service({ text, background: 'rgba(0,0,0,0.2)', });
-}
-// 隐藏loading 
-function loadingHide(){ 
-  loadingInstance && loadingInstance.close();
-}
-
-// 显示提示弹窗 
-function alertShow(message){ 
-  MessageBox.alert({ type: 'error', title: '接口提示', message, });
-}
-
-// 是否请求成功判断 
-function isSuccess(result){
-  let {data,status,statusText,headers,request,config,} = result; 
-  
-  // 接口定义 
-  // if ( data && data.errcode===0 ) { return true; }
-  // if ( data && data.errcode===undefined ) { return true; }
-  // if ( !data && status===200 ) { return true; }
-}
-// 错误信息获取 
-function getErrorMsg(result){
-  let {data,status,statusText,headers,request,config,} = result; 
-  
-  // 接口定义 
-  // console.log(result,data);
-  return data.errmsg || statusText;
-}
-
-
-let request = ({
+let Request = ({
   method="post",    // post/get,请求方法 
   url='/',          // str,请求地址 
   query={},         // obj,请求查询键值对
@@ -92,8 +67,45 @@ let request = ({
     loading && loadingHide()
   });
 }
+export default Request;
 
-export default request;
+
+
+
+
+// 显示loading 
+function loadingShow(){ 
+  loadingInstance = Loading.service({ text, background: 'rgba(0,0,0,0.2)', });
+}
+// 隐藏loading 
+function loadingHide(){ 
+  loadingInstance && loadingInstance.close();
+}
+
+// 显示提示弹窗 
+function alertShow(message){ 
+  MessageBox.alert({ type: 'error', title: '接口提示', message, });
+}
+
+// 是否请求成功判断 
+function isSuccess(result){
+  let {data,status,statusText,headers,request,config,} = result; 
+  
+  // 接口定义 
+  // if ( data && data.errcode===0 ) { return true; }
+  // if ( data && data.errcode===undefined ) { return true; }
+  // if ( !data && status===200 ) { return true; }
+}
+// 错误信息获取 
+function getErrorMsg(result){
+  let {data,status,statusText,headers,request,config,} = result; 
+  
+  // 接口定义 
+  // console.log(result,data);
+  return data.errmsg || statusText;
+}
+
+
 
 
 // TODO: 待测试  
