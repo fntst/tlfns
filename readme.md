@@ -1,22 +1,19 @@
 <h1> zkits JS功能/工具集 </h1>
 
-<div>tips: 继承自 tlfns npm模块(tlfns本人已不再维护)</div>
+<div>tips: 继承自 tlfns npm模块(本人已不再维护tlfns模块)</div>
 
 <br/>
-安装: 
+安装&引入: 
 
 ``` 
 $ npm i -S zkits 
-```
 
-
-使用方式: 
-```
 // 引入指定功能 
 import xxx from "zkits/src/xx/xxx.js";
-或 
-import 'zkits/src/xx/xxx.js';  // 引入无变量导出的某些功能 
+// 引入无变量导出的某些功能 
+import 'zkits/src/xx/xxx.js';  
 ```
+<!--  
 
 <h1> 功能列表文档: </h1>
 
@@ -134,7 +131,7 @@ LocalFiles  本地文件上传
 
 
 
-◆设计方案:
+◆解决方案:
 ```
 import adapt from './src/design/adapt.js';  
 adapt(sizeList,root,outMinHandle,outMaxHandle)  // 用于移动端页面布局 
@@ -223,10 +220,13 @@ StateManager 使用例子:
 
 ``` 
 
+-->
 
 
 <h1>持续更新中....</h1>
-PS: 若有需要的功能, 也可以提 issue 
+PS: 若有需要的功能 或好的建议, 请留言 
+
+
 
 
 
