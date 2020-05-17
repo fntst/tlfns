@@ -21,7 +21,7 @@ import { Loading, MessageBox } from 'element-ui';
 // loading相关操作 
 let loadingInstance = null; // 
 // 显示loading 
-function loadingShow(){ 
+function loadingShow(text){ 
   loadingInstance = Loading.service({ text, background: 'rgba(0,0,0,0.2)', });
 }
 // 隐藏loading 
@@ -31,7 +31,9 @@ function loadingHide(){
 
 // 显示提示弹窗 
 function alertShow(message){ 
-  MessageBox.alert({ type: 'error', title: '接口提示', message, });
+  MessageBox.alert(message, '接口提示', { 
+    type: 'error', 
+  });
 }
 
 // 是否请求成功判断 
