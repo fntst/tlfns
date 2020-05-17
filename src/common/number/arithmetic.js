@@ -1,26 +1,36 @@
-// 数值 相关操作 
+/*** 算术四则运算 精确计算  
+* @author  fsl 
+* @time    时间值 
+* -----------------------------
+* @import   引入方式说明 
+* @example  使用方式说明 
+* -----------------------------
+* @detail  
+* 01 详细说明1 
+* -----------------------------
+* @update  
+* 时间值 更新说明 
+*/
 
-
-// 取舍小数位 
-export function roundFloat(num,decimals=0){  
-  /*Input:  
-  * Output: float,
-  */
-  return Number( Math.round(`${num}e${decimals}`) + `e-${decimals}` );
-}
-
-
-/* 精确四则运算 */
-// 获取数值的小数位个数 
+// 工具方法: 获取数值的小数位个数 
 function getDecimal(num){
   let arr = num.toString().split('.')
   let result = 0; 
   if (arr[1]) { result = arr[1].length; }
   return result; 
 }
-/* 
-方式1: 转换为整数后运算 
-缺点: 可能导致大整数溢出问题 
+/*** 精确四则运算 方式1: 转换为整数后运算 缺点: 可能导致大整数溢出问题
+* @params  xxx  type,参数说明
+* @return  type,返回值说明 
+* -----------------------------
+* @author  fsl 
+* @time    时间值 
+* -----------------------------
+* @detail  
+* 01 详细说明1 
+* -----------------------------
+* @update  
+* 时间值 更新说明 
 */
 export function preciseCalc1(type,num1,num2,decimal){
   /* 
@@ -58,21 +68,19 @@ export function preciseCalc1(type,num1,num2,decimal){
   let deci = decimal?decimal:2;
   return Number( typMap[type](num1,num2,d1,d2).toFixed(deci) ) 
 }
-/* 
-方式2: 转换成数组进行模拟运算  
+/*** 精确四则运算 方式2: 转换成数组进行模拟运算 
+* @params  xxx  type,参数说明
+* @return  type,返回值说明 
+* -----------------------------
+* @author  fsl 
+* @time    时间值 
+* -----------------------------
+* @detail  
+* 01 详细说明1 
+* -----------------------------
+* @update  
+* 时间值 更新说明 
 */
-// 单位数乘多位数 
-function multiply(num,arr){
-  let n = 0; 
-  let result = arr.map( (itm,idx)=>{
-    let val = itm*num; 
-    val += n;
-    n = Math.floor(val/10); 
-    return val %= 10; 
-  })
-  if (n!==0) { result.push(n); }
-  return result;
-}
 export function preciseCalc2(type,num1,num2,decimal){
   /* 
   type     KW,运算类型: '+' '-' '*' '/' 
@@ -206,25 +214,48 @@ export function preciseCalc2(type,num1,num2,decimal){
   return Number( typMap[type](arr1,arr2,d1,d2).toFixed(deci) ) 
 }
 
-/* 
-数字转换为中文 
-  如 378 叁佰柒拾捌 
+
+
+/*** 工具方法: 一位数乘多位数 
+* @params  xxx  type,参数说明
+* @return  type,返回值说明 
+* -----------------------------
+* @author  fsl 
+* @time    时间值 
+* -----------------------------
+* @detail  
+* 01 详细说明1 
+* -----------------------------
+* @update  
+* 时间值 更新说明 
 */
+function multiply(num,arr){
+  let n = 0; 
+  let result = arr.sort(()=>-1).map( (itm,idx)=>{
+    let val = itm*num; 
+    val += n;
+    n = Math.floor(val/10); 
+    return val %= 10; 
+  })
+  if (n!==0) { result.push(n); }
+  return result.sort(()=>-1);
+}
 
 
-
-
+/* ================================== 测试 ================================== */
 export function test(){
   
-  // console.log( preciseCalc1('+',2.0,1,9), 2.0 + 1, );
-  // console.log( preciseCalc1('+',0.1,0.2,9), 0.1 + 0.2, );
-  // console.log( preciseCalc1('-',0.3,0.1,9), 0.3 - 0.1, );
-  // console.log( preciseCalc1('*',0.2,0.1,9), 0.2 * 0.1, );
-  // console.log( preciseCalc1('*',0.3,3,9), 0.3 * 3, );
-  // console.log( preciseCalc1('/',0.3,0.2,9), 0.3 / 0.2, );
+  console.log( multiply(7, [3,4,2,3]), 7*3423 );
+  console.log(' ----------------------------------------------------  ');
   
   
-  
+  console.log( preciseCalc1('+',2.0,1,9), 2.0 + 1, );
+  console.log( preciseCalc1('+',0.1,0.2,9), 0.1 + 0.2, );
+  console.log( preciseCalc1('-',0.3,0.1,9), 0.3 - 0.1, );
+  console.log( preciseCalc1('*',0.2,0.1,9), 0.2 * 0.1, );
+  console.log( preciseCalc1('*',0.3,3,9), 0.3 * 3, );
+  console.log( preciseCalc1('/',0.3,0.2,9), 0.3 / 0.2, );
+  console.log(' ----------------------------------------------------  ');
   console.log( preciseCalc2('+',2.0,1,9), 2.0 + 1, );
   console.log( preciseCalc2('+',0.1,0.2,9), 0.1 + 0.2, );
   console.log( preciseCalc2('+',2.0,-1,9), 2.0 - 1, );
@@ -233,15 +264,4 @@ export function test(){
   
   
 } 
-
-
-
-
-
-
-
-
-
-
-
 

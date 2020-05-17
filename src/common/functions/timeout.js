@@ -13,8 +13,7 @@
 * @update  
 * 时间值 更新说明 
 */
-
-export default function timeout(bolFn, total=1000*33, step=1000*0.333){
+export default function main(bolFn, total=1000*33, step=1000*0.333){
   if (typeof bolFn != 'function') { return Promise.reject('error arguments: bolFn error'); }
   
   console.log('# query');
@@ -24,33 +23,29 @@ export default function timeout(bolFn, total=1000*33, step=1000*0.333){
   
   return new Promise((resolve,reject)=>{
     setTimeout(()=>{
-      resolve( timeout(bolFn, total-step, step) )
+      resolve( main(bolFn, total-step, step) )
     },step)
   })
 }
 
 
 
-// 测试 
-export function test(flg='main'){
-  if (flg==='main') {
+/* ================================== 测试 ================================== */
+let map = {
+  main(){
     let f = false; 
     // setTimeout(()=>{ f = true },3000)
     
-    timeout(()=>{ return f; })
+    main(()=>{ return f; })
     .then((msg)=>{
       console.log(msg);
     }
     ,err=>{
       console.warn(err);
     })
-    
-    
-  }
-  else if (true) {
-    
-  }
-  
+  }, 
 }
-
+export function test(flg='main'){
+  return map[flg](); 
+}
 

@@ -1,6 +1,6 @@
 {
   "name": "zkits",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "frontend tools",
   "main": "src/index.js",
   "directories": {
@@ -26,5 +26,7 @@
   "bugs": {
     "url": "https://github.com/fntst/zkits/issues"
   },
-  "homepage": "https://github.com/fntst/zkits#readme"
+  "homepage": "https://github.com/fntst/zkits#readme",
+  "dependencies": {
+  }
 }

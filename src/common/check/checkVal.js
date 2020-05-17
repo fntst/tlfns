@@ -1,3 +1,4 @@
+
 /*** 检视 对象成员 
 * @params  objVal  obj,待检测的对象
 * @return  obj,对象的成员属性等信息 
@@ -21,7 +22,6 @@ export default function viewObject(objVal){
     members: getObjKeys(objVal),
   };
 };
-
 
 /*** 检视 类/构造函数的方法&属性等 
 * @params  cnstrct  Cls,待检测的构造函数 
@@ -55,8 +55,8 @@ export function viewConstructor(cnstrct){
 };
 
 
-/* 获取对象的键值 */
-export function getObjKeys(checkObj){
+/* 工具函数: 获取对象的键值 */
+function getObjKeys(checkObj){
   let _members = []
   let keys = Object.getOwnPropertyNames(checkObj) 
   let _resultArr = keys.map(function(itm,idx ){
@@ -105,9 +105,4 @@ export function test(){
   console.log( viewObject({}) );
   console.log( viewConstructor(Object) );
 } 
-
-
-
-
-
 

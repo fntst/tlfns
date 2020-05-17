@@ -3,6 +3,7 @@
 /* ================================== common ================================ */
 // import { test } from "./common/noexport/Object.js";
 
+// import { test } from "./common/Number.js";
 // import { test } from "./common/polyfill/apply.js";
 
 // import { test } from "./common/check/type.js";
@@ -16,33 +17,26 @@
 
 // import { test } from "./common/checkVal.js";
 
+// import { test } from "./common/debounce.js";
+// import { test } from "./common/throttle.js";
 // import { test } from "./common/timeout.js";
+// import { test } from "./common/getCallerName.js";
+// import { test } from "./common/regexp.js";
 
 
 /* ================================= browser ================================ */
+// todo: import { test } from "./browser/request.js";
 // import { test } from "./browser/adapt.js";
 // import { test } from "./browser/copyText.js";
 // import { test } from "./browser/envCheck.js";
 // import { test } from "./browser/EvtTarget.js";
 // import { test } from "./browser/getOffset.js";
-import { test } from "./browser/LocalFiles.js";
+// import { test } from "./browser/LocalFiles.js";
+// import { test } from "./browser/logPrint.js";
 
 
 
 
 
-
-test(); 
-
-
-
-
-
-
-
-
-
-
-
-
+// test(); 
 
