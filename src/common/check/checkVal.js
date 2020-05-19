@@ -1,4 +1,7 @@
 
+
+import checkType from "./type.js";
+
 /*** 检视 对象成员 
 * @params  objVal  obj,待检测的对象
 * @return  obj,对象的成员属性等信息 
@@ -14,17 +17,15 @@
 */
 export default function viewObject(objVal){
   return {
-    type: [
-      typeof objVal,
-      Object.prototype.toString.call(objVal).slice(8,-1),
-    ],
-    construct: objVal.constructor.name,
+    type: checkType(objVal),
+    constructor: objVal.constructor.name,
     members: getObjKeys(objVal),
   };
 };
 
+
 /*** 检视 类/构造函数的方法&属性等 
-* @params  cnstrct  Cls,待检测的构造函数 
+* @params  clsVal  Cls,待检测的构造函数 
 * @return  obj,构造函数相关的属性/方法  
 * -----------------------------
 * @author  fsl 
@@ -36,23 +37,21 @@ export default function viewObject(objVal){
 * @update  
 * 时间值 更新说明 
 */
-export function viewConstructor(cnstrct){
+export function viewConstructor(clsVal){
   let members = [];
-  try { members = getObjKeys( new cnstrct() ) } 
+  try { members = getObjKeys( new clsVal() ) } 
   catch (e) { members = ['获取报错']; } 
   
-  let proto = cnstrct.prototype.__proto__;
+  let proto = clsVal.prototype.__proto__;
   return {
-    type: [ 
-      typeof cnstrct, 
-      Object.prototype.toString.call(cnstrct).slice(8,-1), 
-    ],
+    type: checkType(clsVal),
     extend: proto ? proto.constructor.name : proto,
-    statics: getObjKeys( cnstrct ),
-    protos: getObjKeys( cnstrct.prototype ),
+    statics: getObjKeys( clsVal ),
+    protos: getObjKeys( clsVal.prototype ),
     members,
   };
 };
+
 
 
 /* 工具函数: 获取对象的键值 */
@@ -65,35 +64,35 @@ function getObjKeys(checkObj){
     catch(e){ itm1 = '___' } 
     
     let map = {
-      'function': {
-        key(arg){ return arg+'()'; },
-        val(arg){ return ''},
-      },
-      'object': {
+      function: {
         key(arg){ return arg; },
-        val(arg){ return 'obj'},
+        rst(arg){ return 'fn'},
       },
-      'string': {
+      object: {
         key(arg){ return arg; },
-        val(arg){ return '\''+arg+'\''},
+        rst(arg){ return 'obj'},
       },
-      'boolean': {
+      string: {
         key(arg){ return arg; },
-        val(arg){ return 'bol'},
+        rst(arg){ return '\''+arg+'\''},
+      },
+      // number boolean 
+      default: {
+        key(arg){ return arg; },
+        rst(arg){ return arg},
       },
     }
     
-    let current = map[typeof itm1] || {
-      key(arg){ return arg; },
-      val(arg){ return arg; },
-    };
+    let current = map[typeof itm1] || map.default;
     itm = current.key(itm);
-    itm1 = current.val(itm1);
+    itm1 = current.rst(itm1);
     
-    try { _members.push(`.${itm}  ${itm1}`) } 
-    catch (e) { _members.push(`---`) } 
+    try { _members.push( { key: itm, rst: itm1, } ) } 
+    catch (e) { _members.push({ key: '-', rst: '-', }) } 
   }) 
-  return _members;
+  return _members.sort((i1,i2)=>{
+    return i1.key.charCodeAt(0)-i2.key.charCodeAt(0)
+  });
 };
 
 

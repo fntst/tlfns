@@ -41,7 +41,6 @@ export default function main(checkVal){
 }
 
 
-
 /*** 是否是对象  
 * @params  checkVal  any,待检测的值 
 * @return  bol,是否为对象类型的布尔值表示 
@@ -63,6 +62,7 @@ export function isObject(checkVal){
   
   return typeOfVal==='object';
 } 
+
 
 
 /*** 是否为 NaN  
@@ -87,7 +87,7 @@ export function isNaN(val){ return Number.isNaN(val); }
 
 
 
-// 测试 
+/* 测试 */ 
 let fnMap = {
   main,
   isObject,

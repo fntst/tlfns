@@ -41,9 +41,11 @@ function isSuccess(result){
   let {data,status,statusText,headers,request,config,} = result; 
   
   // 接口定义 
-  // if ( data && data.errcode===0 ) { return true; }
+  if ( data && data.errcode==='0' ) { return true; }
   // if ( data && data.errcode===undefined ) { return true; }
   // if ( !data && status===200 ) { return true; }
+  
+  return false;
 }
 // 错误信息获取 
 function getErrorMsg(result){
@@ -51,7 +53,7 @@ function getErrorMsg(result){
   
   // 接口定义 
   // console.log(result,data);
-  return data.errmsg || statusText;
+  return data.msg || '未知错误';
 }
 
 
