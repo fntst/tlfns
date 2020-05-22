@@ -1,30 +1,35 @@
 
-/* 选取本地文件 */
-export default class LocalFiles {
+/* 上传本地文件 */
+export default class Main {
   /*** 功能初始化 
-  * @params  multiple     bol,是否可多选 
-  * @params  accept       bol,可选文件类型,可自定义,如: '.pdf,.doc'   
-  * @params  limitNum     num,一次最多可选数量  
-  * @params  limitSize    num,最大文件体积,unit:B,默认:10M 
-  * @params  base64       bol,是否返回base64 
-  * @params  url          str,上传地址 
-  * @params  uploadField  str,文件上传字段 
+  * @params  option     obj,初始化选项  
+  *   .multiple        bol,是否可多选 
+  *   .accept          bol,可选文件类型,可自定义,如: '.pdf,.doc'   
+  *   .limitNum        num,一次最多可选数量  
+  *   .limitSize       num,最大文件体积,unit:B,默认:10M 
+  *   .base64          bol,是否返回base64 
+  *   .url             str,上传地址 
+  *   .uploadField     str,文件上传字段 
+  *   .judgeSuccess  fn(response),用来判断是否上传成功的函数 
+  *     response 上传后返回的响应,
+  *     返回布尔值,表示是否返回成功 
   * @return  obj,用来提供操作方法的对象 
   */
-  constructor({
-    multiple=true,
-    accept="*",
-    limitNum=99,
-    limitSize=1024*1024*10,
-    base64=false, 
-    
-    url='', 
-    uploadField='', 
-  })
-  { 
+  constructor(option) { 
+    let {
+      multiple=true,
+      accept="*",
+      limitNum=99,
+      limitSize=1024*1024*10,
+      base64=false, 
+      // 
+      url='', 
+      uploadField='file', 
+      judgeSuccess=function(){ return true; },
+    } = option;
     if (!document) { return new Error("document is not defined") }
     
-    this.options = { multiple, accept, limitNum, limitSize, base64, url, uploadField, } 
+    this.options = { multiple, accept, limitNum, limitSize, base64, url, uploadField, judgeSuccess, } 
     
     this._fileInput = document.createElement("input"); // 缓存元素  
     this._fileInput.setAttribute("type","file"); 
@@ -83,12 +88,10 @@ export default class LocalFiles {
   }
   
   _uploadFiles(files){
-    let { url, uploadField, } = this.options;
+    let { url, uploadField, judgeSuccess, } = this.options;
     
     let fd = new FormData();
-    files.forEach((itm,idx)=>{
-      fd.append(uploadField,itm.file,itm.file.name)
-    })
+    files.forEach((itm,idx)=>{ fd.append(uploadField,itm.file,itm.file.name) })
     return new Promise((res,rej)=>{
       let xhr = new XMLHttpRequest();
       xhr.open('post',url,true);
@@ -96,21 +99,15 @@ export default class LocalFiles {
       xhr.onreadystatechange = ()=>{
         if(xhr.readyState!==4){ return ; }
         
-        if( xhr.response ) {
-          res({ list: files, response:xhr.response, xhr, });
-        }
-        else{
-          rej({ list: files, response:xhr.response, xhr, });
-        } 
+        let isSuccess = judgeSuccess(xhr.response, xhr)
+        if( isSuccess ) { res(new Result({ files, })); }
+        else{ rej(new Result({ files, })); } 
       }
       xhr.send(fd); 
     });
   }
   _dealFiles(files,resolve,reject){
-    if (!this.options.url) {
-      resolve({ list: files, }); 
-      return ;
-    }
+    if (!this.options.url) { return resolve(new Result({ files, })); }
     
     this._uploadFiles(files)
     .then(data=>{ resolve(data); })
@@ -120,34 +117,33 @@ export default class LocalFiles {
     return new Promise((resolve,reject)=>{
       // 文件类型控制 
       
-      let isOutTypes = false;
+      let currentOutType = '';
       if (accept!=='*') {
-        isOutTypes = files.some(itm=>{
+        currentOutType = files.find(itm=>{ 
           let ext = (itm.name.match(/\.\w+?$/)||[])[0]
-          if (!accept.includes(ext)) {
-            reject({ 
-              code: 1, 
-              msg: 'out limit types', 
-              
-              acceptTypes: accept,
-              currentType: ext,
-            });
-            return true;
-          }
-        })
+          return !accept.includes(ext)   
+        });
       }
-      if (isOutTypes) { return ; }
+      if (currentOutType) { 
+        reject({ 
+          code: 1, 
+          msg: 'out limit types', 
+          
+          acceptTypes: accept,
+          currentType: currentOutType,
+        });
+        return ;
+      }
       
       // 文件数量控制 
       if (files.length>limitNum) {
-        reject({ 
+        return reject({ 
           code: 2, 
           msg: 'out limit num', 
           
           limitNum: limitNum,
           currentNum: files.length,
         });
-        return ;
       }
       
       // 文件大小控制 
@@ -182,16 +178,25 @@ export default class LocalFiles {
             more: flRd 
           });
           
-          files.length===_counter && this._dealFiles(rstList,resolve,reject);
+          if (files.length===_counter) { this._dealFiles(rstList,resolve,reject); }
         }; 
       });
     });
   }
 };
+// 返回的结果 
+class Result {
+  constructor(args) {
+    let { 
+      files=[], 
+    } = args;
+    this.files = files;
+  }
+}
 
 
-/* 测试 */
-export function test(){
+/*  ====================================== 测试 ============================= */
+export function test(cb){
   
   document.body.insertAdjacentHTML("beforeend",`
     <button id="button1" type="button">测试</button>
@@ -206,17 +211,24 @@ export function test(){
   `)
   
   
-  let localFiles = new LocalFiles({
+  let localFiles = new Main({
     base64: true, 
+    // url: '/upload',
+    // judgeSuccess(res){
+    //   console.log(res);
+    //   return false;
+    // },
   });
   button1.addEventListener("click",function(evt){
     localFiles.pick()
-    .then(list=>{
-      console.log(list);
+    .then(data=>{
+      console.log(data);
+      cb && cb(data)
     });
   })
   localFiles.onDrop(div1,function(data){
     console.log(data);
   })
   
-} 
+}
+

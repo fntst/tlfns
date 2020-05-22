@@ -8,7 +8,7 @@
 * 2.1 设置滚动底部的触发区间[触发区间内 只会触发一次] 
 */
 
-class Scroll {
+export default class Scroll {
   /* 
   @params elemTarget  Element,监听的滚动目标元素 
   @params isVertical  bol,是否为垂直滚动 
@@ -211,7 +211,6 @@ class Scroll {
   }
 }
 
-export default Scroll; 
 
 
 

@@ -31,12 +31,14 @@
 // import { test } from "./browser/envCheck.js";
 // import { test } from "./browser/EvtTarget.js";
 // import { test } from "./browser/getOffset.js";
-// import { test } from "./browser/LocalFiles.js";
 // import { test } from "./browser/logPrint.js";
+import { test } from "./browser/files/upload.js";
+// import { test1 } from "./browser/files/download.js";
 
 
 
 
 
-// test(); 
+test(); 
+// test1(); 
 
