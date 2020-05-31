@@ -1,5 +1,3 @@
-
-
 import { isIE } from "./envCheck.js";
 
 /*** 页面自动缩放适应 缩放元素,可用于自适应布局 
@@ -10,10 +8,10 @@ import { isIE } from "./envCheck.js";
 * @time    时间值 
 * -----------------------------
 * @detail  
-* 01 详细说明1 
+- 01 详细说明1 
 * -----------------------------
 * @update  
-* 时间值 更新说明 
+- 时间值 更新说明 
 */
 export default function main(totalW,selector){
   let winWidth = window.innerWidth - 20; // 微调 
@@ -50,6 +48,5 @@ export function test(){
   // 表示默认1400px宽度的layout的元素 
   // 在较小的宽度下也能适当的显示[而不会出现滚动条] 
 } 
-
 
 

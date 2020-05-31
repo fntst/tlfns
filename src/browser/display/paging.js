@@ -10,14 +10,16 @@
 * @time    时间值 
 * -----------------------------
 * @detail  
-* 自动分页, 功能额待完善 
+- 自动分页, 功能额待完善 
 * -----------------------------
-* @update  
-* 时间值 更新说明 
+* @todo  
+- TODO: 分割元素到两个页面中 
+- 方法: 将被分割的元素A复制一份记为B, 
+- 通过B定位来向下偏移(分页间隙+下边距+上边距) 
+- 通过内层元素负边距来实现内容位置调整 
+- 使用一背景色元素覆盖作为间隙 
 */
-
-
-export default function paging(root, elems, pageH, offsetTop, isAddGap=true){
+export default function main(root, elems, pageH, offsetTop, isAddGap=true){
   if (window.getComputedStyle(root).position==='static') {
     root.style.position = 'relative'
   }
@@ -86,18 +88,13 @@ export default function paging(root, elems, pageH, offsetTop, isAddGap=true){
   } 
   offsetEl(elems,0,0);
   
-  // TODO: 分割元素到两个页面中 
-  // 方法: 将被分割的元素A复制一份记为B, 
-  // 通过B定位来向下偏移(分页间隙+下边距+上边距) 
-  // 通过内层元素负边距来实现内容位置调整 
-  // 使用一背景色元素覆盖作为间隙 
 } 
 
 
 
 
 
-/* 测试 */
+/* ================================== 测试 ================================== */
 export function test(){
   
 } 

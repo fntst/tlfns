@@ -1,5 +1,5 @@
 
-/*** 图片base64转Blob 
+/*** base64转Blob 
 * @params  base64  str,待转化的base64字符串 
 * @return  blob,转换后的blob 
 * -----------------------------
@@ -31,7 +31,7 @@ export function dataURL2Blob(base64){
   
   return blob 
 }
-
+/* blob转base64 使用 URL.createObjectURL(blob) */
 
 /*** 压缩单张图片 异步操作  
 * @params  imgBase64  str,图片base64 
@@ -95,5 +95,9 @@ export function imgCompress(imgBase64, options){
   })
 }
 
+
+/* ================================== 测试 ================================== */
+export function test(){
+} 
 
 
