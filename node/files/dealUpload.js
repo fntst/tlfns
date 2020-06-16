@@ -2,7 +2,7 @@
 
 // 处理文件上传 
 /* Input: obj,请求 */
-module.exports = function dealFileLoad(requset){  
+function dealFileLoad(requset){  
   return new Promise((resolve,reject)=>{
     let reqData = '';
     // 边界字符串
@@ -39,6 +39,7 @@ module.exports = function dealFileLoad(requset){
   });
 },
 
+module.exports = dealFileLoad;
 // 使用案例：
 // dealFileLoad(req).then((data,fileName)=>{
 //   let writerStream = fs.createWriteStream(`./files/${fileName}`);

@@ -26,7 +26,7 @@
 @return undefined 
 */
 import getOffset from "./getOffset.js";
-function onMouseMove(moveArea,callback,{viewport,page,percent}){
+export default function main(moveArea,callback,{viewport,page,percent}){
   moveArea.addEventListener("mousemove",function(evt){
     
     let top = evt.offsetY || evt.layerY 
@@ -71,7 +71,6 @@ function onMouseMove(moveArea,callback,{viewport,page,percent}){
   })
 } 
 
-export default onMouseMove; 
 
 
 /* 测试 */
@@ -135,7 +134,7 @@ export function test(){
     viewport: true,
     page: true,
   }
-  onMouseMove(divArea,function(rst){
+  main(divArea,function(rst){
     console.log(rst);
     moveDiv.setAttribute("style",`
       position: absolute;

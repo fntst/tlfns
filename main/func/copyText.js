@@ -47,7 +47,7 @@ export default copyText;
 
 
 
-/* 测试 */
+/* 测试 ===================================================================== */
 export function test(){
   document.body.insertAdjacentHTML("beforeend",`
   <button id="btn1">copyText: 复制的文本</button>
