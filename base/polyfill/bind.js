@@ -10,10 +10,17 @@ Function.prototype.bind = function(context,...args){
 }
 
 
-/* 测试 */
-// fn.bind(context,arg1);
-// 
-// context.fn(arg1)
+/* ===================================================================== 测试 */
+export function test(){
+  let obj = { key : 111, }
+  let fn = function( arg ){
+    console.log(this.key, arg);
+  }
+  let fn1 = fn.bind(obj, 222);
+  
+  fn1() // 111 222 
+} 
+
 
 
 

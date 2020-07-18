@@ -84,10 +84,7 @@ export function isNaN(val){ return Number.isNaN(val); }
 
 
 
-
-
-
-/* 测试 */ 
+/* ==================================================================== 测试  */ 
 let fnMap = {
   main,
   isObject,
@@ -115,10 +112,11 @@ export function test(fnName='main'){
   console.log( fnMap[fnName]( new Date() ) );
   console.log( fnMap[fnName]( /1/ ) );
   console.log( fnMap[fnName]( new RegExp() ) );
-  console.log( fnMap[fnName]( window ) );
+  console.log( fnMap[fnName]( globalThis ) );
   console.log( fnMap[fnName]( {} ) );
   console.log( fnMap[fnName]( {a:1,} ) );
   console.log( fnMap[fnName]( new Object() ) );
 } 
+
 
 

@@ -114,43 +114,75 @@ class Callthen {
   }
 }
 
-module.exports = Callthen;
-// export default Callthen; 
+export default Callthen; 
 
 
 
-/* 测试 */
-function test(){
+/* ===================================================================== 测试 */
+export function test(){
   // new Callthen(document.addEventListener,['click'])
   
-  new Callthen(process.stdin.on.bind(process.stdin),['data'])
-  .then(function(data){
-    console.log('then1',data);
-  
-    this.done('aaa');
-    this.call(2);
-    setTimeout(()=>{
-      this.call(1111);
-      //this.call(1);
-    },1000)
-  })
-  .then(function(data){
-    console.log('then2',data);
-    this.call(3);
-  })
-  .then(function(data){
-    console.log('then3',data);
-    setTimeout(()=>{
-      this.call(4)
-    },1000)
-  })
-  .then(function(data){
-    console.log('then4',data);
-  })
-  .over(function(err){ 
-    console.log('over1',err);
-  });
+  if (globalThis.process) {
+    new Callthen(process.stdin.on.bind(process.stdin),['data'])
+    .then(function(data){
+      console.log('then1',data);
+      
+      this.done('aaa');
+      this.call(2);
+      setTimeout(()=>{
+        this.call(1111);
+        //this.call(1);
+      },1000)
+    })
+    .then(function(data){
+      console.log('then2',data);
+      this.call(3);
+    })
+    .then(function(data){
+      console.log('then3',data);
+      setTimeout(()=>{
+        this.call(4)
+      },1000)
+    })
+    .then(function(data){
+      console.log('then4',data);
+    })
+    .over(function(err){ 
+      console.log('over1',err);
+    });
+  }
+  else {
+    new Callthen(document.addEventListener.bind(document),['click'])
+    .then(function(data){
+      console.log('then1',data);
+      
+      this.done('aaa');
+      this.call(2);
+      setTimeout(()=>{
+        this.call(1111);
+        //this.call(1);
+      },1000)
+    })
+    .then(function(data){
+      console.log('then2',data);
+      this.call(3);
+    })
+    .then(function(data){
+      console.log('then3',data);
+      setTimeout(()=>{
+        this.call(4)
+      },1000)
+    })
+    .then(function(data){
+      console.log('then4',data);
+    })
+    .over(function(err){ 
+      console.log('over1',err);
+    });
+  }
   
 } 
+
+
 
 

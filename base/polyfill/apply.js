@@ -8,7 +8,7 @@ Function.prototype.apply = function(context,argList){
 
 
 
-/* 测试 */
+/* ===================================================================== 测试 */
 export function test(){
   
   Array.prototype.forEach.apply(['a','b','c'],[function(itm,idx){
@@ -16,6 +16,9 @@ export function test(){
   }])
   
 } 
+
+
+
 
 
 

@@ -11,8 +11,14 @@ Function.prototype.call = function(context,...args){
 }
 
 
-/* 测试 */
-// fn.call(context,arg1)
+/* ===================================================================== 测试 */
+export function test(){
+  
+  Array.prototype.forEach.call(['a','b','c'], (itm,idx)=>{
+    console.log(idx, itm);
+  })
+  
+} 
 
 
 

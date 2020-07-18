@@ -2,6 +2,7 @@
 
 import checkType from "./type.js";
 
+
 /*** 检视 对象成员 
 * @params  objVal  obj,待检测的对象
 * @return  obj,对象的成员属性等信息 
@@ -104,4 +105,8 @@ export function test(){
   console.log( viewObject({}) );
   console.log( viewConstructor(Object) );
 } 
+
+
+
+
 

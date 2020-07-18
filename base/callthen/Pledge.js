@@ -213,8 +213,7 @@ class Pledge {
   }
 }
 
-module.exports = Pledge;
-// export default Pledge;
+export default Pledge;
 
 
 
@@ -222,8 +221,8 @@ module.exports = Pledge;
 
 
 
-/* 测试 */
-function test(){
+/* ===================================================================== 测试 */
+export function test(){
   
   new Pledge(function(resolve,reject){
     reject(222);

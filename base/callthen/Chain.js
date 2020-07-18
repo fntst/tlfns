@@ -1,5 +1,4 @@
-// import Pledge from "./Pledge.js";
-const Pledge = require("./Pledge.js");
+import Pledge from "./Pledge.js";
 
 // 自定义的回调转链式调用 
 class Chain extends Pledge {
@@ -85,13 +84,12 @@ class Chain extends Pledge {
   // }
 }
 
-module.exports = Chain;
-// export default Chain;
+export default Chain;
 
 
 
-/* 测试 */
-function test(){
+/* ===================================================================== 测试 */
+export function test(){
   new Chain(process.stdin.on.bind(process.stdin),['data'],[true])
   .then(([evt])=>{
     console.log(evt);

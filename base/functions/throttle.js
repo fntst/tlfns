@@ -49,10 +49,19 @@ function delayFn(targetFn,time){
 export function test(){
   let throttleFn1 = main(function(evt){ console.log('11111111111111111111111111111111111',evt); },500,true)
   let throttleFn2 = main(function(evt){ console.log('22222222222222222222222222222222222',evt); },500,false)
-  document.addEventListener("mousemove",function(evt){
-    console.log('000000000000000000000000000000000');
-    throttleFn1(evt)
-    throttleFn2(evt)
-  })
+  if (globalThis.document) {
+    document.addEventListener("mousemove",function(evt){
+      console.log('000000000000000000000000000000000');
+      throttleFn1(evt)
+      throttleFn2(evt)
+    })
+  }
+  else {
+    setInterval(()=>{
+      console.log('000000000000000000000000000000000');
+      throttleFn1('1')
+      throttleFn2('2')
+    },100)
+  }
 } 
 

@@ -27,11 +27,24 @@ function fn2(targetFn,time){ }
 
 /* ================================== 测试 ================================== */
 export function test(){
+  console.log(' test run ');
   let debounceFn = main(function(evt){
     console.log('#debounce', evt);
   })
-  document.addEventListener("mousemove",function(evt){
-    debounceFn(evt)
-  })
+  if (globalThis.document) {
+    document.addEventListener("mousemove",function(evt){
+      debounceFn(evt)
+    })
+  }
+  else {
+    let id = setInterval(()=>{
+      console.log('11');
+      debounceFn('evt')
+    },100)
+    
+    setTimeout(()=>{
+      clearInterval(id)
+    },1000)
+  }
 } 
 

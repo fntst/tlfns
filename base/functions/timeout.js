@@ -34,7 +34,7 @@ export default function main(bolFn, total=1000*33, step=1000*0.333){
 let map = {
   main(){
     let f = false; 
-    // setTimeout(()=>{ f = true },3000)
+    setTimeout(()=>{ f = true },3000)
     
     main(()=>{ return f; })
     .then((msg)=>{
