@@ -90,19 +90,36 @@ export default Chain;
 
 /* ===================================================================== 测试 */
 export function test(){
-  new Chain(process.stdin.on.bind(process.stdin),['data'],[true])
-  .then(([evt])=>{
-    console.log(evt);
-    // return 'bbb';
-    return new Pledge((resolve,reject)=>{
-      setTimeout(()=>{
-        resolve('aaa')
-      },2000)
+  if (globalThis.process) {
+    new Chain(process.stdin.on.bind(process.stdin),['data'],[true])
+    .then(([evt])=>{
+      console.log(evt);
+      // return 'bbb';
+      return new Pledge((resolve,reject)=>{
+        setTimeout(()=>{
+          resolve('aaa')
+        },2000)
+      })
     })
-  })
-  .then((data)=>{
-    console.log(data);
-  })
+    .then((data)=>{
+      console.log(data);
+    })
+  }
+  else {
+    new Chain(document.addEventListener.bind(document),['click'],[true])
+    .then(([evt])=>{
+      console.log(evt);
+      // return 'bbb';
+      return new Pledge((resolve,reject)=>{
+        setTimeout(()=>{
+          resolve('aaa')
+        },2000)
+      })
+    })
+    .then((data)=>{
+      console.log(data);
+    })
+  }
 } 
 
 

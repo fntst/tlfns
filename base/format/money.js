@@ -177,21 +177,7 @@ function ch_dec(decimals, decimalNum=2, isRound=true){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* 测试 */
+/* ===================================================================== 测试 */
 let fnMap = {
   main(){
     console.log( main(  ) );

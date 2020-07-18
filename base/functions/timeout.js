@@ -30,7 +30,7 @@ export default function main(bolFn, total=1000*33, step=1000*0.333){
 
 
 
-/* ================================== 测试 ================================== */
+/* ===================================================================== 测试 */
 let map = {
   main(){
     let f = false; 
@@ -48,4 +48,5 @@ let map = {
 export function test(flg='main'){
   return map[flg](); 
 }
+
 

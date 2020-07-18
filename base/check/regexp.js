@@ -56,3 +56,5 @@ export function test(){
   console.log( isNumber('0x10') ); //  true 
 } 
 
+
+

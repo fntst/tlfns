@@ -55,7 +55,7 @@ export function querystring(targetObj, link='&', split='='){
 
 
 
-/* ================================== 测试 ================================== */
+/* ===================================================================== 测试 */
 export function test(){
   console.log( main('key1=a&key2=b') );
   console.log( main('?key1=a&key2=b') );
@@ -66,5 +66,6 @@ export function test(){
   console.log( main('?key1:a+key2:b:c','+',':') );
   
 } 
+
 
 

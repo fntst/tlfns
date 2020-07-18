@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>ECMAScript_ESModules_test</title>
+</head>
+<body>
+
+
+<script type="module">
+  import * as polyfillCall from'./polyfill/call.js'
+  import * as polyfillApply from'./polyfill/apply.js'
+  import * as polyfillBind from'./polyfill/bind.js'
+  import * as checkType from './check/type.js';
+  import * as checkMembers from './check/members.js';
+  import * as checkRegexp from './check/regexp.js';
+  import * as checkMoney from './format/money.js';
+  import * as checkQuery from './format/query.js';
+  import * as checkSort from './format/sort.js';
+  import * as checkTime from './format/time.js';
+  import * as funcArithmetic from'./func/arithmetic.js'
+  import * as funcLog from'./func/log.js'
+  import * as funcStateManager from'./func/StateManager.js'
+  import * as funcUtils from'./func/utils.js'
+  import * as functionsDebounce from'./functions/debounce.js'
+  import * as functionsThrottle from'./functions/throttle.js'
+  import * as functionsGetCallerName from'./functions/getCallerName.js'
+  import * as functionsTimeout from'./functions/timeout.js'
+  import * as noexportObject from'./noexport/Object.js'
+  import * as callthenCallthen from'./callthen/Callthen.js'
+  import * as callthenPledge from'./callthen/Pledge.js'
+  import * as callthenChain from'./callthen/Chain.js'
+  import * as callthenIndex from'./callthen/index.js'
+  
+  polyfillCall.test()
+  polyfillApply.test()
+  polyfillBind.test()
+  checkType.test();
+  checkMembers.test();
+  checkRegexp.test();
+  checkMoney.test();
+  checkQuery.test();
+  checkSort.test();
+  checkTime.test();
+  funcArithmetic.test()
+  funcLog.test()
+  funcStateManager.test()
+  funcUtils.test()
+  functionsDebounce.test()
+  functionsThrottle.test()
+  functionsGetCallerName.test()
+  functionsTimeout.test()
+  noexportObject.test()
+  callthenCallthen.test()
+  callthenPledge.test()
+  callthenChain.test()
+  callthenIndex.test()
+  
+  
+</script>
+</body>
+</html>

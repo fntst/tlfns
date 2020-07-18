@@ -27,7 +27,7 @@ export default function main(time){
 }
 
 
-/* 测试 */
+/* ===================================================================== 测试 */
 let fnMap = {
   main,
 }
@@ -45,5 +45,6 @@ export function test(flg='main'){
   console.log( fnMap[flg]('20') );
   
 }
+
 
 

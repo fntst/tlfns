@@ -22,7 +22,14 @@ else {
   global.Callthen = Callthen;
 }
 
-console.log( globalThis.Pledge.name );
+/* ===================================================================== 测试 */
+export function test(){
+  
+  console.log( globalThis.Pledge.name );
+  
+} 
+
+
 
 
 

@@ -27,7 +27,7 @@ export default function main(){
 
 
 
-/* ================================== 测试 ================================== */
+/* ===================================================================== 测试 */
 export function test(){  
   'use strict';
   function fn1(arg=0) {
@@ -41,4 +41,5 @@ export function test(){
   
   console.log( '#当前执行的函数名为: ', main() );
 }
+
 

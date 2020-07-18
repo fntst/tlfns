@@ -45,7 +45,7 @@ function delayFn(targetFn,time){
 
 
 
-/* ================================== 测试 ================================== */
+/* ===================================================================== 测试 */
 export function test(){
   let throttleFn1 = main(function(evt){ console.log('11111111111111111111111111111111111',evt); },500,true)
   let throttleFn2 = main(function(evt){ console.log('22222222222222222222222222222222222',evt); },500,false)
@@ -57,11 +57,13 @@ export function test(){
     })
   }
   else {
-    setInterval(()=>{
+    let id = setInterval(()=>{
       console.log('000000000000000000000000000000000');
       throttleFn1('1')
       throttleFn2('2')
     },100)
+    
+    setTimeout(()=>{ clearInterval(id) },1000)
   }
 } 
 

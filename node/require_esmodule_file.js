@@ -33,49 +33,50 @@ function getFileHash(fsData){
   fsHash.update(fsData);
   return fsHash.digest('hex');
 } 
-function dealFileData(fileStr, path){
+function dealFileData(fileStr, path, fileHash, num){
   
   fileStr = dealExport(fileStr);
   
   fileStr = dealImport(fileStr, path);
   
-  fileStr = `/* R_ESM_F+++ */ \n/* origin_file_hash:${getFileHash(fileStr)} */\n\n` + fileStr;
+  fileStr = `/* write_file_num:<${num}> */ \n/* origin_file_hash:${fileHash} */ \n\n` + fileStr;
   return fileStr;
 } 
 function dealExport(fileStr){
+  // 处理 export { xx1:xx2, xx, }
+  let exportName = /(?:export\s+)(\{.+?\})\;?/msg.exec(fileStr) || [];
+  exportName = exportName[1]
+  if ( exportName ) {
+    fileStr = fileStr.replace(/(export\s+\{.+?\}\s*?\;?)/msg, '/* R_ESM_F-e{} */ \n/* $1 */');
+    fileStr += `/* R_ESM_F+me{} */ \nmodule.exports = ${exportName};\n`
+  }
+  
   // 处理 export default function xxx
   // 处理 export default class xxx
   let defaultName = fileStr.match(/export\s+default\s+(?:function\s+|class\s+)(\w+).+/) || [];
   defaultName = defaultName[1]
   if (defaultName) { 
-    fileStr = fileStr.replace(/\bexport\s+default\b\s+(\w+)/msg, '/* R_ESM_F--- */ \n/* export default */ $1')
-    fileStr += `/* R_ESM_F+++ */ \nmodule.exports.default = ${defaultName};\n\n`
+    fileStr = fileStr.replace(/\bexport\s+default\b\s+(\w+)/msg, '/* R_ESM_F-ed<f/c> */ \n/* export default */ $1')
+    fileStr += `/* R_ESM_F+med<f/c> */ \nmodule.exports.default = ${defaultName};\n\n`
   }
   // 处理 export default xxx
   else {
     let defaultName1 = fileStr.match(/export\s+default\s+(\w+).+/) || [];
     defaultName1 = defaultName1[1]
     if (defaultName1) { 
-      fileStr = fileStr.replace(/\bexport\s+default\b\s+(\w+)\;?/msg, '/* R_ESM_F--- */ \n/* export default $1; */')
-      fileStr += `/* R_ESM_F+++ */ \nmodule.exports.default = ${defaultName1};\n\n`
+      fileStr = fileStr.replace(/\bexport\s+default\b\s+(\w+)\;?/msg, '/* R_ESM_F-ed */ \n/* export default $1; */')
+      fileStr += `/* R_ESM_F+med */ \nmodule.exports.default = ${defaultName1};\n\n`
     }
   }
   
   // 处理 export function 
-  let exportFnNames = fileStr.match(/(?<=export\s+function\s+)\w+/msg);
+  // 处理 export class 
+  let exportFnNames = fileStr.match(/(?<=export\s+(?:function|class)\s+)\w+/msg);
   if ( exportFnNames && exportFnNames.length>0 ) {
-    fileStr = fileStr.replace(/\bexport\s+(?!default)/msg, '/* R_ESM_F--- */ \n/* export */');
+    fileStr = fileStr.replace(/\bexport\s+(function|class)/msg, '/* R_ESM_F-e<f/c> */ \n/* export */ $1');
     exportFnNames.forEach(itm=>{
-      fileStr += `/* R_ESM_F+++ */ \nmodule.exports.${itm} = ${itm};\n`
+      fileStr += `/* R_ESM_F+me<f/c> */ \nmodule.exports.${itm} = ${itm};\n`
     })
-  }
-  
-  // 处理 export { xx1:xx2, xx, }
-  let exportName = /(?:export\s+)(\{.+?\})\;?/msg.exec(fileStr) || [];
-  exportName = exportName[1]
-  if ( exportName ) {
-    fileStr = fileStr.replace(/(export\s+\{.+?\}\;?)/msg, '/* R_ESM_F--- */ \n/* $1 */');
-    fileStr += `/* R_ESM_F+++ */ \nmodule.exports = ${exportName};\n`
   }
   
   return fileStr;
@@ -86,12 +87,12 @@ function dealImport(fileStr, path){
   // 处理 import xx from "./xx.js";
   let importNames = fileStr.match(/import\s+(\w+)\s+from\s+[\"\'](.+?)[\"\']/mgs) 
   if ( importNames && importNames.length>0 ) {
-    fileStr = fileStr.replace(/(import\s+\w+\s+from\s+[\"\'].+?[\"\'])\;?/mgs,'/* R_ESM_F--- */ \n/* $1 */') 
+    fileStr = fileStr.replace(/(import\s+\w+\s+from\s+[\"\'].+?[\"\'])\;?/mgs,'/* R_ESM_F-if */ \n/* $1 */') 
     
     importNames.forEach(itm=>{
       let str = itm.replace(/import\s+/, '')
       let arr = str.split(/\s+from\s+/)
-      fileStr = `/* R_ESM_F+++ */ \nconst ${arr[0]} = require_esmodule_file(${arr[1]}).default;\n` + fileStr;
+      fileStr = `/* R_ESM_F+ref */ \nconst ${arr[0]} = require_esmodule_file(${arr[1]}).default;\n` + fileStr;
     })
     
     isNeedREM = true; 
@@ -100,11 +101,11 @@ function dealImport(fileStr, path){
   // 处理 import "./xx.js";
   let imports = fileStr.match(/import\s+[\"\'](.+?)[\"\']/mgs) 
   if ( imports && imports.length>0 ) {
-    fileStr = fileStr.replace(/(import\s+[\"\'].+?[\"\'])\;/mgs,'/* R_ESM_F--- */ \n/* $1 */') 
+    fileStr = fileStr.replace(/(import\s+[\"\'].+?[\"\'])\;/mgs,'/* R_ESM_F-i */ \n/* $1 */') 
     
     imports.forEach(itm=>{
       let str = itm.replace(/import\s+/, '')
-      fileStr = `/* R_ESM_F+++ */ \nrequire_esmodule_file(${str}).default;\n` + fileStr;
+      fileStr = `/* R_ESM_F+ref */ \nrequire_esmodule_file(${str}).default;\n` + fileStr;
     })
     
     isNeedREM = true; 
@@ -131,17 +132,20 @@ module.exports = function(dirname){
     let fileDataStr = fs.readFileSync(path, { encoding: 'utf-8', })
     if ( !fs.existsSync(newPath) ) {
       // console.log(' ###文件不存在写入文件: ', newPath);
-      fs.writeFileSync(newPath, dealFileData(fileDataStr, path));
+      fs.writeFileSync(newPath, dealFileData(fileDataStr, path, getFileHash(fileDataStr), 1));
       return require(newPath);
     }
     
-    let newFileDataStr = fs.readFileSync(newPath, { encoding: 'utf-8', })
-    let hashPre = newFileDataStr.match(/(?<=origin_file_hash:)([\w0-9]+?)\s/) || [];
-    hashPre = hashPre[1]
-    let hashNow = getFileHash(fileDataStr);
-    if ( hashPre!==hashNow ) {
+    let cacheFileDataStr = fs.readFileSync(newPath, { encoding: 'utf-8', })
+    let originFileHash = cacheFileDataStr.match(/(?<=origin_file_hash:)([\w0-9]+?)\s/) || [];
+    originFileHash = originFileHash[1]
+    let currentFileHash = getFileHash(fileDataStr);
+    if ( originFileHash!==currentFileHash ) {
       // console.log(' ###文件过旧,写入文件: ', newPath);
-      fs.writeFileSync(newPath, dealFileData(fileDataStr, path));
+      let num = /write_file_num:<(\d)>/.exec(cacheFileDataStr) || ['',1]; 
+      num = num[1]*1;
+      num++;
+      fs.writeFileSync(newPath, dealFileData(fileDataStr, path, currentFileHash, num));
       return require(newPath);
     }
     

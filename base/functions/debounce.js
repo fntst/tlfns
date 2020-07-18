@@ -25,7 +25,7 @@ export default function main(targetFn,time=500){
 function fn2(targetFn,time){ } 
 
 
-/* ================================== 测试 ================================== */
+/* ===================================================================== 测试 */
 export function test(){
   console.log(' test run ');
   let debounceFn = main(function(evt){
@@ -47,4 +47,5 @@ export function test(){
     },1000)
   }
 } 
+
 

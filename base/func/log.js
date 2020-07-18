@@ -47,7 +47,7 @@ export default function main(...args){
 };
 
 
-/* ================================== 测试 ================================== */
+/* ==================================================================== 测试  */
 export function test(){
   main()
   main(undefined)
@@ -64,4 +64,5 @@ export function test(){
   main('a', 'b')
   main('a', 'b', 'c')
 } 
+
 

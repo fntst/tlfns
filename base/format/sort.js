@@ -24,7 +24,7 @@ export default function sort(targetArr,referKey,valOrderArr){
 
 
 
-/* 测试 ===================================================================== */
+/* ===================================================================== 测试 */
 export function test(){
   let targetArr = [
     {
@@ -46,4 +46,5 @@ export function test(){
   
   
 } 
+
 
