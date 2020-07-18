@@ -16,7 +16,7 @@ import checkType from "./type.js";
 * @update  
 * 时间值 更新说明 
 */
-export default function viewObject(objVal){
+export function viewObject(objVal){
   return {
     type: checkType(objVal),
     constructor: objVal.constructor.name,
