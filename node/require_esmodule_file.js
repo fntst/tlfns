@@ -1,4 +1,4 @@
-/* 加载 es module 文件 
+/* Node中加载引用 es module 文件 
 实现方法: 
   加载 ems 文件 xx.js 将 export 等关键字替换成 module.exports, 
   然后生成 xx-_-.js 文件进行 require 加载返回 [可配置 .gitignore *-_-.js 来忽略缓存文件 ] 
@@ -10,7 +10,7 @@ TODO:
   待完善所有 es module 的加载导出语法的处理 
 */
 
-// 相关 
+// 相关细节配置 
 const config = {
   /* 前缀和后缀不可同时为空 */
   prefix: '',  // 转换后的文件的前缀 
