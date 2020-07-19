@@ -40,7 +40,7 @@ export function viewObject(objVal){
 */
 export function viewConstructor(clsVal){
   let type = checkType(clsVal);
-  if (type!=='Function') { return new Error('入参错误: viewConstructor'); }
+  if (type!=='Function') { throw new Error('入参错误: viewConstructor'); }
   
   let members = [];
   try { members = getObjKeys( new clsVal() ) } 
