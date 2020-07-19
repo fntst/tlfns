@@ -1,32 +1,42 @@
 
 
 
-const require_esmodule_file = require("../node/require_esmodule_file.js")(__dirname)
+// const resm = require("../node/require_esmodule_file.js")(__dirname)
+const resm = require("../node/require_esmodule.js")
 
 
-require_esmodule_file('./check/type.js').test()
-require_esmodule_file('./check/members.js').test()
-require_esmodule_file('./check/regexp.js').test()
-require_esmodule_file('./format/money.js').test()
-require_esmodule_file('./format/query.js').test()
-require_esmodule_file('./format/sort.js').test()
-require_esmodule_file('./format/time.js').test()
-require_esmodule_file('./func/arithmetic.js').test()
-require_esmodule_file('./func/log.js').test()
-require_esmodule_file('./func/StateManager.js').test()
-require_esmodule_file('./func/utils.js').test()
-require_esmodule_file('./functions/debounce.js').test()
-require_esmodule_file('./functions/getCallerName.js').test()
-require_esmodule_file('./functions/throttle.js').test()
-require_esmodule_file('./functions/timeout.js').test()
-require_esmodule_file('./noexport/Object.js').test()
-require_esmodule_file('./polyfill/apply.js').test()
-require_esmodule_file('./polyfill/bind.js').test()
-require_esmodule_file('./polyfill/call.js').test()
-require_esmodule_file('./callthen/Callthen.js').test()
-require_esmodule_file('./callthen/Pledge.js').test()
-require_esmodule_file('./callthen/Chain.js').test()
-require_esmodule_file('./callthen/index.js').test()
+
+resm('./check/type.js').test()
+resm('./check/members.js').test()
+resm('./check/regexp.js').test()
+
+resm('./format/money.js').test()
+resm('./format/query.js').test()
+resm('./format/sort.js').test()
+resm('./format/time.js').test()
+
+resm('./func/arithmetic.js').test()
+resm('./func/log.js').test()
+resm('./func/StateManager.js').test()
+resm('./func/utils.js').test()
+
+resm('./functions/debounce.js').test()
+resm('./functions/getCallerName.js').test()
+resm('./functions/getStackInfo.js').test()
+resm('./functions/throttle.js').test()
+resm('./functions/timeout.js').test()
+
+resm('./noexport/Object.js').test()
+
+resm('./polyfill/apply.js').test()
+resm('./polyfill/bind.js').test()
+resm('./polyfill/call.js').test()
+
+resm('./callthen/Callthen.js').test()
+resm('./callthen/Pledge.js').test()
+resm('./callthen/Chain.js').test()
+resm('./callthen/index.js').test()
+
 
 
 
