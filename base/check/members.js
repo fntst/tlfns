@@ -40,11 +40,11 @@ export function viewObject(objVal){
 */
 export function viewConstructor(clsVal){
   let type = checkType(clsVal);
-  if (type!=='Function') { throw new Error('入参错误: viewConstructor'); }
+  if (type!=='Function') { throw new Error('zkits:error argument: need a constructor'); }
   
   let members = [];
   try { members = getObjKeys( new clsVal() ) } 
-  catch (e) { members = ['获取报错']; } 
+  catch (e) { members = [{key: 'todo', rst: '获取报错', }]; } 
   
   let proto = clsVal.prototype.__proto__;
   return {
