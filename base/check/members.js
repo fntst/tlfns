@@ -39,13 +39,16 @@ export function viewObject(objVal){
 * 时间值 更新说明 
 */
 export function viewConstructor(clsVal){
+  let type = checkType(clsVal);
+  if (type!=='Function') { return new Error('入参错误: viewConstructor'); }
+  
   let members = [];
   try { members = getObjKeys( new clsVal() ) } 
   catch (e) { members = ['获取报错']; } 
   
   let proto = clsVal.prototype.__proto__;
   return {
-    type: checkType(clsVal),
+    type,
     extend: proto ? proto.constructor.name : proto,
     statics: getObjKeys( clsVal ),
     protos: getObjKeys( clsVal.prototype ),
@@ -100,10 +103,16 @@ function getObjKeys(checkObj){
 
 
 
-// 测试 
+/* ===================================================================== 测试 */
 export function test(){
   console.log( viewObject({}) );
   console.log( viewConstructor(Object) );
+  if (globalThis.document) {
+    
+  }
+  else {
+    console.log( viewConstructor( globalThis.Atomics ) );
+  }
 } 
 
 
