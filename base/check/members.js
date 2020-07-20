@@ -17,9 +17,14 @@ import checkType from "./type.js";
 * 时间值 更新说明 
 */
 export function viewObject(objVal){
+  let type = checkType(objVal);
+  if (type==='undefined' || type==='null' || type==='NaN') {
+    throw new Error('zkits: error argument')
+  }
+  
   return {
     type: checkType(objVal),
-    constructor: objVal.constructor.name,
+    construct: objVal.constructor.name,
     members: getObjKeys(objVal),
   };
 };
