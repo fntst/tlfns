@@ -1,6 +1,6 @@
 {
   "name": "zkits",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "frontend tools",
   "main": "src/index.js",
   "directories": {

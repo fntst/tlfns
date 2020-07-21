@@ -65,38 +65,66 @@ export function viewConstructor(clsVal){
 
 /* 工具函数: 获取对象的键值 */
 function getObjKeys(checkObj){
+  let typeMap = {
+    'undefined': {
+      key(arg){ return arg; },
+      rst(arg){ return 'undefined'},
+    },
+    'null': {
+      key(arg){ return arg; },
+      rst(arg){ return 'null'},
+    },
+    'NaN': {
+      key(arg){ return arg; },
+      rst(arg){ return 'NaN'},
+    },
+    'Boolean': {
+      key(arg){ return arg; },
+      rst(arg){ return 'bol'},
+    },
+    'Number': {
+      key(arg){ return arg; },
+      rst(arg){ return 'num'},
+    },
+    'String': {
+      key(arg){ return arg; },
+      rst(arg){ return `'${arg}'`;},
+    },
+    'Function': {
+      key(arg){ return arg; },
+      rst(arg){ return 'fn'},
+    },
+    'Array': {
+      key(arg){ return arg; },
+      rst(arg){ return 'arr'},
+    },
+    'Date': {
+      key(arg){ return arg; },
+      rst(arg){ return 'date'},
+    },
+    'Regexp': {
+      key(arg){ return arg; },
+      rst(arg){ return 'rgep'},
+    },
+    'default': {
+      key(arg){ return arg; },
+      rst(arg){ return (arg+'').replace(/\[object\s(\w+)?\]/,'$1'); },
+    },
+  }
+  
   let _members = []
   let keys = Object.getOwnPropertyNames(checkObj) 
   let _resultArr = keys.map(function(itm,idx ){
-    let itm1 = '' 
-    try { itm1 = checkObj[itm] } 
-    catch(e){ itm1 = '___' } 
+    let val = '' 
+    try { val = checkObj[itm] } 
+    catch(e){ val = '___' } 
     
-    let map = {
-      function: {
-        key(arg){ return arg; },
-        rst(arg){ return 'fn'},
-      },
-      object: {
-        key(arg){ return arg; },
-        rst(arg){ return 'obj'},
-      },
-      string: {
-        key(arg){ return arg; },
-        rst(arg){ return '\''+arg+'\''},
-      },
-      // number boolean 
-      default: {
-        key(arg){ return arg; },
-        rst(arg){ return arg},
-      },
-    }
     
-    let current = map[typeof itm1] || map.default;
+    let current = typeMap[checkType(val)] || typeMap.default;
     itm = current.key(itm);
-    itm1 = current.rst(itm1);
+    val = current.rst(val);
     
-    try { _members.push( { key: itm, rst: itm1, } ) } 
+    try { _members.push( { key: itm, rst: val, } ) } 
     catch (e) { _members.push({ key: '-', rst: '-', }) } 
   }) 
   return _members.sort((i1,i2)=>{
