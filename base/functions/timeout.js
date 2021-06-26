@@ -16,16 +16,24 @@
 export default function main(bolFn, total=1000*33, step=1000*0.333){
   if (typeof bolFn != 'function') { return Promise.reject('error arguments: bolFn error'); }
   
-  console.log('# query');
-  if (bolFn()) { return Promise.resolve('success') }
+  // console.log('# query');
+  let totalRest = total-step; 
+  if ( bolFn(totalRest) ) { return Promise.resolve('success') }
+  if ( totalRest<0 ) { return Promise.reject('timeout') }
   
-  if (total-step<0) { return Promise.reject('timeout') }
-  
+  // 方式一: 
   return new Promise((resolve,reject)=>{
     setTimeout(()=>{
-      resolve( main(bolFn, total-step, step) )
+      resolve( main(bolFn, totalRest, step) )
     },step)
   })
+  // 方式二: 
+  // return new Promise((resolve,reject)=>{
+  //   setTimeout(()=>{ resolve() }, step)
+  // })
+  // .then(()=>{
+  //   return main(bolFn, totalRest, step) ;
+  // })
 }
 
 
