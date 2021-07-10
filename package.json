@@ -1,7 +1,7 @@
 {
   "name": "zkits",
-  "version": "1.0.4",
-  "description": "frontend tools",
+  "version": "1.1.0",
+  "description": "frontend kits",
   "main": "src/index.js",
   "directories": {
     "test": "test"
