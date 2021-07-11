@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <title> 浏览器环境相关功能测试 </title>
+  <style >
+    
+
+    body {
+      /* min-height: 50vh; */
+      outline: 1px solid red;
+    }
+    .wrap {
+      height: 50vh;
+      outline: 2px solid blue;
+      overflow: auto;
+    }
+    .content {
+      width: 90%;
+      margin: auto;
+      height: 100vh;
+      border: 3px solid green;
+      background-image: linear-gradient(0deg, #000, #fff)
+    }
+    
+  </style>
+</head>
+<body>
+  
+  <div class="wrap">
+    <div class="content">
+      
+    </div>
+  </div>
+  
+  
+</body>
+<script type="module">
+  // import { test } from "../../src/browser/check/getImgSize.js";
+  import { test } from "../../../../src/browser/func/pullBackSpring.js";
+  test(); 
+
+
+</script>
+</html>
